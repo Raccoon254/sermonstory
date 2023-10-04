@@ -9,13 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('scriptures', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('story_id');
+            $table->text('content');
             $table->timestamps();
+            $table->foreign('story_id')->references('id')->on('stories')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.
