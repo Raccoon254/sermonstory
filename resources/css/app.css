@@ -122,3 +122,15 @@ button:focus:not(:focus-visible) {
     background: rgba(197, 21, 21, 0.2);
 }
 
+div>nav{
+    width: 100%;
+}
+
+.custom>div{
+    width: 100%;
+}
+
+.select-none{
+    background: #82a0f6;
+}
+

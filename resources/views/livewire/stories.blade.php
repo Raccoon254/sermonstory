@@ -52,7 +52,7 @@
                     </div>
                 @endforeach
 
-                <div class="w-full flex justify-between">
+                <div class="w-full custom flex justify-between">
                     {{ $filteredStories->links() }}
                 </div>
             </section>
