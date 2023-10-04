@@ -29,4 +29,7 @@ Route::view('profile', 'profile')
 Route::get('/stories', [StoryController::class, 'index'])
     ->name('stories');
 
+Route::get('/about', 'about')
+    ->name('about');
+
 require __DIR__.'/auth.php';
