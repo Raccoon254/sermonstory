@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class CategoryTag extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
+
+    public function stories()
+    {
+        return $this->belongsToMany(Story::class);
+    }
+
 }
