@@ -17,7 +17,7 @@ class Stories extends Component
     }
 
 
-    public function performSearch()
+    public function performSearch(): void
     {
         $this->resetPage();
     }
@@ -28,6 +28,12 @@ class Stories extends Component
         return view('livewire.stories', ['filteredStories' => Story::where('title', 'like', '%' . $this->search . '%')
             ->orWhere('content', 'like', '%' . $this->search . '%')
                 ->orWhere('moral_lesson', 'like', '%' . $this->search . '%')
+            ->orWhereHas('categoryTags', function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->orWhereHas('scriptures', function ($query) {
+                $query->where('content', 'like', '%' . $this->search . '%');
+            })
             ->paginate(10)]);
     }
 
