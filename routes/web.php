@@ -15,8 +15,7 @@ use Livewire\Volt\Volt;
 |
 */
 
-Route::view('/', 'welcome')
-    ->name('welcome');
+Route::get('/', [StoryController::class, 'home'])->name('home');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -29,5 +28,16 @@ Route::view('profile', 'profile')
 Route::get('/about', function () {
     return view('about');
 })->name('about');
+
+// Routes that should have the 'can:manage' middleware
+Route::get('stories/create', [StoryController::class, 'create'])->middleware('can:manage')->name('stories.create');
+Route::get('stories/{story}/edit', [StoryController::class, 'edit'])->middleware('can:manage')->name('stories.edit');
+Route::post('stories', [StoryController::class, 'store'])->middleware('can:manage')->name('stories.store');
+Route::put('stories/{story}', [StoryController::class, 'update'])->middleware('can:manage')->name('stories.update');
+Route::delete('stories/{story}', [StoryController::class, 'destroy'])->middleware('can:manage')->name('stories.destroy');
+
+// The rest of the resource routes
+Route::resource('stories', StoryController::class)->middleware(['auth', 'verified'])->except(['create', 'edit', 'store', 'update', 'destroy']);
+
 
 require __DIR__.'/auth.php';

@@ -24,10 +24,40 @@
                         <h2 class="text-xl mb-3 font-semibold">{{ $story['title'] }}</h2>
                         <p class="mb-3">{{ $story['content'] }}</p>
 
+                        <div class="flex justify-end gap-2 mb-3">
+
+                            <div class="flex tooltip gap-3 mb-3">
+                                <a href="{{ route('stories.show', $story) }}" class="btn ring ring-inset">
+                                    View Story
+                                </a>
+                            </div>
+
+                        @if(auth()->user() && Gate::allows('manage'))
+
+                                <div data-tip="Edit Story" class="flex tooltip gap-3 mb-3">
+                                    <a href="{{ route('stories.edit', $story) }}" class="btn ring ring-inset">
+                                        <i class="fa-solid fa-pen-nib"></i>
+                                    </a>
+                                </div>
+
+                                <form data-tip="Delete Story" action="{{ route('stories.destroy', $story) }}" method="POST" class="d-inline tooltip">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn ring ring-inset ring-orange-600">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </form>
+
+                        @endif
+
+                        </div>
+
+
+
                         @php
-                            $colors = ['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'indigo', 'gray'];
+                            $colors = ['red', 'blue', 'green', 'purple', 'pink', 'indigo', 'gray', 'yellow', 'orange', 'teal', 'cyan', 'fuchsia', 'lime', 'lightBlue', 'emerald', 'rose', 'violet', 'amber', 'sky', 'orange', 'indigo', 'pink', 'red', 'blue', 'green', 'purple', 'pink', 'indigo', 'gray', 'orange', 'teal', 'cyan', 'fuchsia', 'lime', 'lightBlue', 'emerald', 'rose', 'violet', 'amber', 'sky', 'orange', 'indigo', 'pink', 'red', 'blue', 'green', 'purple', 'pink', 'indigo', 'gray', 'yellow', 'orange', 'teal', 'cyan', 'fuchsia', 'lightBlue', 'emerald', 'rose', 'violet', 'amber', 'sky', 'orange', 'indigo', 'pink', 'red', 'blue', 'green', 'purple', 'pink', 'indigo', 'gray', 'yellow', 'orange', 'teal', 'cyan', 'fuchsia', 'lime', 'lightBlue', 'emerald', 'rose', 'violet', 'amber', 'sky', 'orange', 'indigo', 'pink'];
                         @endphp
-                       <section class="flex gap-4 mb-3">
+                       <section class="flex text-xs gap-4 mb-3">
                            <!--Verses-->
                            <div class="flex align-middle items-center flex-wrap gap-1 mb-2">
                                @foreach ($story->scriptures as $scripture)
@@ -57,7 +87,9 @@
                 </div>
             </section>
         @else
-            <p>No stories found</p>
+            <div class="h-[50vh] flex justify-center items-center">
+                <center>No stories found</center>
+            </div>
         @endif
     </section>
 
