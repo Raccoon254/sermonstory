@@ -21,7 +21,7 @@
 @endif
 
 <!-- Hero Section -->
-<section class="bg-cover bg-center text-white relative h-[70vh] flex justify-center items-center" style="background-image: url('https://img.freepik.com/free-photo/holy-bible-with-rays-light-coming-out-ai-generative_123827-23905.jpg?w=996&t=st=1696515965~exp=1696516565~hmac=b9306cb72e268f99806166c7208305fba4dd71503bd0e9f498b0198b154a1da1');">
+<section class="bg-cover bg-center text-white relative h-[70vh] flex justify-center items-center" style="background-image: url('./a.jpg');">
     <div class="absolute inset-0 bg-black opacity-40"></div>
     <div class="relative z-10 text-center">
         <h1 class="sm:text-5xl text-4xl font-bold mb-4">SermonStories™️</h1>
@@ -37,7 +37,7 @@
         @foreach($stories as $story)
             <div class="bg-white p-6 rounded shadow hover:shadow-lg">
                 <h3 class="text-xl font-semibold mb-3">{{ $story->title }}</h3>
-                <p>{{ Str::limit($story->content, 100) }}...</p> <!-- This will display the first 100 characters of the story content -->
+                <p>{{ Str::limit($story->content, 100) }}...</p>
                 <a href="{{ route('stories.show', $story) }}" class="text-indigo-600 mt-2 inline-block">Read More</a>
             </div>
         @endforeach

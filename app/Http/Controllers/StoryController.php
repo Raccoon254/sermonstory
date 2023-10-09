@@ -101,4 +101,9 @@ class StoryController extends Controller
         $story->delete();
         return redirect()->route('stories.index')->with('success', 'Story deleted successfully.');
     }
+
+    public function generateStory(): View
+    {
+        return view('stories.generate');
+    }
 }
