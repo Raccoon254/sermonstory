@@ -37,7 +37,7 @@ Route::put('stories/{story}', [StoryController::class, 'update'])->middleware('c
 Route::delete('stories/{story}', [StoryController::class, 'destroy'])->middleware('can:manage')->name('stories.destroy');
 Route::get('/generate-story', [StoryController::class, 'generateStory'])->name('generate.story')->middleware('auth');
 
-Route::post('/generate-story', 'StoryController@generate')->name('generate.story');
+Route::post('/generate-story', [StoryController::class, 'generate'])->name('generate.story')->middleware('auth');
 
 
 // The rest of the resource routes

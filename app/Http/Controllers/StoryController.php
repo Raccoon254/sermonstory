@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\CategoryTag;
 use App\Models\Story;
+use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use OpenAI;
 
 class StoryController extends Controller
 {
@@ -105,5 +107,25 @@ class StoryController extends Controller
     public function generateStory(): View
     {
         return view('stories.generate');
+    }
+
+    public function generate(Request $request): RedirectResponse
+    {
+        $promptUser = $request->input('prompt');
+        $prompt = "Create a Bible-related story (340 words) about " . $promptUser . ". Include a lesson and verses supporting it.";
+
+
+        $apiKey = ENV('OPENAI_API_KEY');
+        $client = OpenAI::client($apiKey);
+
+        $response = $client->completions()->create([
+            'model' => 'gpt-3.5-turbo-instruct',
+            'prompt' => $prompt,
+            'max_tokens' => 500,
+        ]);
+
+        $generatedStory = $response['choices'][0]['text'];
+
+        return back()->with('story', $generatedStory ?? 'No story generated');
     }
 }

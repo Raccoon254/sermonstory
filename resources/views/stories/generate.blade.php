@@ -15,6 +15,14 @@
                         Generate Story
                     </button>
                 </form>
+
+                <!-- Display the story if available -->
+                @if(session('story'))
+                    <div class="mt-8 bg-gray-100 p-6 rounded border border-gray-200">
+                        <h3 class="font-bold text-lg mb-4">Generated Story:</h3>
+                        <p>{{ session('story') }}</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
