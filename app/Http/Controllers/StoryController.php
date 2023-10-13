@@ -111,6 +111,7 @@ class StoryController extends Controller
 
     public function generate(Request $request): RedirectResponse
     {
+
         $promptUser = $request->input('prompt');
 
         // 1. Generate the story.
