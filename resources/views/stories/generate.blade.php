@@ -26,6 +26,7 @@
 
                         <h3 class="font-bold text-lg mb-4 mt-6">Supporting Scriptures:</h3>
                         <p>{{ session('content')['verses'] }}</p>
+
                     </div>
                 @endif
 
