@@ -113,7 +113,7 @@ class StoryController extends Controller
     {
         $promptUser = $request->input('prompt');
 
-// 1. Generate the story.
+        // 1. Generate the story.
         $storyPrompt = "Craft a real-life, third-person narrative related to '" . $promptUser . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles dont write the moral lesson and the bible verses, just the story.";
         $story = $this->getOpenAIResponse($storyPrompt, 300);
 
@@ -123,21 +123,22 @@ class StoryController extends Controller
         $lesson = $this->getOpenAIResponse($lessonPrompt, 150);
 
         // 3. Extract the Bible verses supporting the story.
-        $versePrompt = "Based on the lesson derived from the story: '" . $story ."', suggest three Bible verses that support the moral lesson. Return the verses in a structured JSON format. Example format:
-            {
-                'verse1': {
-                    'verse': 'Matthew 1:1',
-                    'content': 'this is the content of the verse'
-                },
-                'verse2': {
-                    'verse': 'Matthew 1:2',
-                    'content': 'this is the content of the verse'
-                },
-                'verse3': {
-                    'verse': 'Matthew 1:3',
-                    'content': 'this is the content of the verse'
-                }
-            }";
+        $versePrompt = "Based on the lesson derived from the story: '" . $story . "', suggest three Bible verses that support the moral lesson. Return the verses in a structured JSON format. Ensure each verse is distinct and relevant to the lesson. Use the following format:
+        {
+            \"verse1\": {
+                \"verse\": \"Matthew 1:1\",
+                \"content\": \"Example content for verse 1\"
+            },
+            \"verse2\": {
+                \"verse\": \"Matthew 1:2\",
+                \"content\": \"Example content for verse 2\"
+            },
+            \"verse3\": {
+                \"verse\": \"Matthew 1:3\",
+                \"content\": \"Example content for verse 3\"
+            }
+        }";
+
         $verses = $this->getOpenAIResponse($versePrompt, 500);
 
         $generatedContent = [

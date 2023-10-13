@@ -27,8 +27,21 @@
                         <h3 class="font-bold text-lg mb-4 mt-6">Supporting Scriptures:</h3>
                         <p>{{ session('content')['verses'] }}</p>
 
+                        @if($versesArray)
+                            @foreach($versesArray as $key => $verseData)
+                                <h4>{{ ucfirst($key) }}</h4>
+                                <p><strong>{{ $verseData['verse'] }}</strong>: {{ $verseData['content'] }}</p>
+                            @endforeach
+                        @else
+                            <p>There was an error decoding the verses.</p>
+                        @endif
+
                     </div>
                 @endif
+
+
+
+
 
             </div>
         </div>
