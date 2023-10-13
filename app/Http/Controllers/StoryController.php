@@ -123,8 +123,22 @@ class StoryController extends Controller
         $lesson = $this->getOpenAIResponse($lessonPrompt, 150);
 
         // 3. Extract the Bible verses supporting the story.
-        $versePrompt = "Based on the lesson derived from the story''" . $story ."'' suggest Bible verses that support the moral lesson.";
-        $verses = $this->getOpenAIResponse($versePrompt, 250);
+        $versePrompt = "Based on the lesson derived from the story: '" . $story ."', suggest three Bible verses that support the moral lesson. Return the verses in a structured JSON format. Example format:
+            {
+                'verse1': {
+                    'verse': 'Matthew 1:1',
+                    'content': 'this is the content of the verse'
+                },
+                'verse2': {
+                    'verse': 'Matthew 1:2',
+                    'content': 'this is the content of the verse'
+                },
+                'verse3': {
+                    'verse': 'Matthew 1:3',
+                    'content': 'this is the content of the verse'
+                }
+            }";
+        $verses = $this->getOpenAIResponse($versePrompt, 500);
 
         $generatedContent = [
             'story' => $story,
