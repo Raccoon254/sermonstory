@@ -16,13 +16,19 @@
                     </button>
                 </form>
 
-                <!-- Display the story if available -->
-                @if(session('story'))
+                @if(session('content'))
                     <div class="mt-8 bg-gray-100 p-6 rounded border border-gray-200">
                         <h3 class="font-bold text-lg mb-4">Generated Story:</h3>
-                        <p>{{ session('story') }}</p>
+                        <p>{{ session('content')['story'] }}</p>
+
+                        <h3 class="font-bold text-lg mb-4 mt-6">Moral Lesson:</h3>
+                        <p>{{ session('content')['lesson'] }}</p>
+
+                        <h3 class="font-bold text-lg mb-4 mt-6">Supporting Scriptures:</h3>
+                        <p>{{ session('content')['verses'] }}</p>
                     </div>
                 @endif
+
             </div>
         </div>
     </div>

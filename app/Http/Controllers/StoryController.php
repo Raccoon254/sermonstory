@@ -112,20 +112,42 @@ class StoryController extends Controller
     public function generate(Request $request): RedirectResponse
     {
         $promptUser = $request->input('prompt');
-        $prompt = "Create a Bible-related story (340 words) about " . $promptUser . ". Include a lesson and verses supporting it.";
+
+// 1. Generate the story.
+        $storyPrompt = "Craft a real-life, third-person narrative related to '" . $promptUser . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles dont write the moral lesson and the bible verses, just the story.";
+        $story = $this->getOpenAIResponse($storyPrompt, 300);
 
 
+        // 2. Extract the lesson from the story.
+        $lessonPrompt = "Based on the story: '" . $story . "', what moral lesson can we derive from it?";
+        $lesson = $this->getOpenAIResponse($lessonPrompt, 150);
+
+        // 3. Extract the Bible verses supporting the story.
+        $versePrompt = "Based on the lesson derived from the story''" . $story ."'' suggest Bible verses that support the moral lesson.";
+        $verses = $this->getOpenAIResponse($versePrompt, 250);
+
+        $generatedContent = [
+            'story' => $story,
+            'lesson' => $lesson,
+            'verses' => $verses
+        ];
+
+        return back()->with('content', $generatedContent ?? 'No content generated');
+
+    }
+
+    private function getOpenAIResponse($prompt, $maxTokens)
+    {
         $apiKey = ENV('OPENAI_API_KEY');
         $client = OpenAI::client($apiKey);
 
         $response = $client->completions()->create([
             'model' => 'gpt-3.5-turbo-instruct',
             'prompt' => $prompt,
-            'max_tokens' => 500,
+            'max_tokens' => $maxTokens,
         ]);
 
-        $generatedStory = $response['choices'][0]['text'];
-
-        return back()->with('story', $generatedStory ?? 'No story generated');
+        return $response['choices'][0]['text'];
     }
+
 }
