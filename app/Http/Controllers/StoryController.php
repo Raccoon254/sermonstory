@@ -70,7 +70,7 @@ class StoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
         $story = Story::findOrFail($id);
         $categoryTags = CategoryTag::all();
@@ -133,12 +133,12 @@ class StoryController extends Controller
 
         $todayPromptsCount = $request->user()->prompts()->whereDate('created_at', today())->count();
 
-        if ($todayPromptsCount >= 9) {
+        if ($todayPromptsCount >= 5) {
             return back()->with('error', 'You have reached the daily limit of 5 prompts.');
         }
 
         // 1. Generate the story
-        $storyPrompt = "Craft a real-life, third-person narrative related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles dont write the moral lesson and the bible verses, just the story.";
+        $storyPrompt = "Craft a third-person  real-life story related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles dont write the moral lesson and the bible verses, just the story.";
         $story = $this->getOpenAIResponse($storyPrompt, 300);
 
 
@@ -188,7 +188,7 @@ class StoryController extends Controller
             ]);
         }
 
-        $request->user()->prompts()->create(['content' => $promptUser]);
+        $request->user()->prompts()->create(['content' => $selectedCategoryNames]);
 
         return back()->with('content', $generatedContent ?? 'No content generated');
 
