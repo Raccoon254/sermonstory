@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoryTag;
+use App\Models\GptScripture;
+use App\Models\GptStory;
+use App\Models\Prompt;
 use App\Models\Story;
 use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
@@ -106,16 +109,36 @@ class StoryController extends Controller
 
     public function generateStory(): View
     {
-        return view('stories.generate');
+        $categories = CategoryTag::all();
+        return view('stories.generate')->with('categories', $categories);
     }
 
     public function generate(Request $request): RedirectResponse
     {
 
-        $promptUser = $request->input('prompt');
+        //if no categories are selected, return an error
+        if (!$request->selected_categories) {
+            return back()->with('error', 'Please select at least one category.');
+        }
 
-        // 1. Generate the story.
-        $storyPrompt = "Craft a real-life, third-person narrative related to '" . $promptUser . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles dont write the moral lesson and the bible verses, just the story.";
+        // Get selected category IDs from the request
+        $selectedCategoryIds = explode(',', $request->selected_categories);
+
+        // Get the category names based on the selected IDs
+        $selectedCategories = CategoryTag::whereIn('id', $selectedCategoryIds)->pluck('name')->toArray();
+
+        // Join the category names into a comma-separated string (if needed)
+        $selectedCategoryNames = implode(' and ', $selectedCategories);
+        //dd($selectedCategoryNames);
+
+        $todayPromptsCount = $request->user()->prompts()->whereDate('created_at', today())->count();
+
+        if ($todayPromptsCount >= 9) {
+            return back()->with('error', 'You have reached the daily limit of 5 prompts.');
+        }
+
+        // 1. Generate the story
+        $storyPrompt = "Craft a real-life, third-person narrative related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles dont write the moral lesson and the bible verses, just the story.";
         $story = $this->getOpenAIResponse($storyPrompt, 300);
 
 
@@ -124,7 +147,7 @@ class StoryController extends Controller
         $lesson = $this->getOpenAIResponse($lessonPrompt, 150);
 
         // 3. Extract the Bible verses supporting the story.
-        $versePrompt = "Based on the lesson derived from the story: '" . $story . "', suggest three Bible verses that support the moral lesson. Return the verses in a structured JSON format. Ensure each verse is distinct and relevant to the lesson. Use the following format:
+        $versePrompt = "Based on the story: '" . $story . "' and '" .$selectedCategoryNames. "' then suggest three Bible verses that support the moral lesson. Return the verses in a structured JSON format. Ensure each verse is distinct and relevant to the lesson. Use the following format:
         {
             \"verse1\": {
                 \"verse\": \"Matthew 1:1\",
@@ -147,6 +170,25 @@ class StoryController extends Controller
             'lesson' => $lesson,
             'verses' => $verses
         ];
+
+        $storyModel = GptStory::create([
+            'title' => 'Title Placeholder',
+            'content' => $story,
+            'moral_lesson' => $lesson,
+        ]);
+
+        // Save the verses associated with the story.
+        $verseData = json_decode($verses, true);
+
+        foreach ($verseData as $verse) {
+            GptScripture::create([
+                'story_id' => $storyModel->id,
+                'verse' => $verse['verse'],
+                'content' => $verse['content'],
+            ]);
+        }
+
+        $request->user()->prompts()->create(['content' => $promptUser]);
 
         return back()->with('content', $generatedContent ?? 'No content generated');
 
