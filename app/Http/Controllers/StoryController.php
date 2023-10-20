@@ -132,6 +132,9 @@ class StoryController extends Controller
         // Get the category names based on the selected IDs
         $selectedCategories = CategoryTag::whereIn('id', $selectedCategoryIds)->pluck('name')->toArray();
 
+        //change selected categories to array
+        $selectedCategoriesArray = explode(',', $request->selected_categories);
+
         // Join the category names into a comma-separated string (if needed)
         $selectedCategoryNames = implode(' and ', $selectedCategories);
         //dd($selectedCategoryNames);
@@ -196,6 +199,8 @@ class StoryController extends Controller
                 'content' => $verse['content'],
             ]);
         }
+
+        $storyModel->categoryTags()->attach($selectedCategoriesArray);
 
         //change this to json $userRequest = $title . ' ' . $selectedCategoryNames;
         $userRequest = $title . ' ' . $selectedCategoryNames;
