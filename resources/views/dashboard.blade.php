@@ -8,23 +8,35 @@
     <div class="py-12">
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-gray-50 overflow-hidden shadow-sm">
                 <div class="p-6 flex flex-col text-gray-900">
-                    {{ __("You're logged in!") }}
-                    you can view stories here
-                    <a href="{{ route('stories.index') }}" class="text-indigo-600 mt-2 inline-block">View Stories</a>
+                    Select a story category to get started. Get our carefully curated stories written by our authors and bring your sermon audience to life.
+                    <div class="flex gap-4 my-3 actions">
+                        <a href="{{ route('stories.index') }}">
+                            <button class="btn btn-md btn-primary ring">
+                                <i class="fa-solid fa-pen-nib"></i> Author Stories
+                            </button>
+                        </a>
+                        <a href="{{ route('stories.index') }}">
+                            <button class="btn btn-md btn-outline ring ring-blue-500">
+                                <i class="fa-solid fa-mountain"></i> GPT Stories
+                            </button>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-4">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-gray-50 overflow-hidden shadow-sm">
                 <div class="p-6 flex flex-col text-gray-900">
-                    {{ __("Generate Stories using gpt4 api key") }}
+                    By using our AI powered story generator, you can create a story in seconds. Simply enter a title and select up to 3 categories and we'll do the rest.
 
                     <a href="{{ route('generate.story') }}" class="mt-4 inline-block font-bold py-2 rounded">
-                        Generate Story
+                        <button class="btn btn-md btn-outline ring ring-blue-500">
+                            <i class="fa-solid fa-forward"></i> Generate a Story
+                        </button>
                     </a>
                 </div>
             </div>

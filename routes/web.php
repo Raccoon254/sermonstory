@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GptStoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoryController;
 use Livewire\Volt\Volt;
@@ -38,7 +39,8 @@ Route::delete('stories/{story}', [StoryController::class, 'destroy'])->middlewar
 Route::get('/generate-story', [StoryController::class, 'generateStory'])->name('generate.story')->middleware('auth');
 
 Route::post('/generate-story', [StoryController::class, 'generate'])->name('generate.story')->middleware('auth');
-
+//resource to GptStoryController
+Route::resource('gptstories', GptStoryController::class)->middleware(['auth', 'verified'])->except(['create', 'edit', 'store', 'update', 'destroy']);
 
 // The rest of the resource routes
 Route::resource('stories', StoryController::class)->middleware(['auth', 'verified'])->except(['create', 'edit', 'store', 'update', 'destroy']);
