@@ -115,6 +115,11 @@ class StoryController extends Controller
 
     public function generate(Request $request): RedirectResponse
     {
+        $title = $request->title;
+
+        if (!$title) {
+            return back()->with('error', 'Please enter a title.');
+        }
 
         //if no categories are selected, return an error
         if (!$request->selected_categories) {
@@ -138,15 +143,19 @@ class StoryController extends Controller
         }
 
         // 1. Generate the story
-        $storyPrompt = "Craft a third-person  real-life story related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles dont write the moral lesson and the bible verses, just the story.";
+        $storyPrompt = "Craft a real-life story related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles dont write the moral lesson and the bible verses, just the story. The users title is '" . $title . "'";
         $story = $this->getOpenAIResponse($storyPrompt, 300);
 
 
         // 2. Extract the lesson from the story.
         $lessonPrompt = "Based on the story: '" . $story . "', what moral lesson can we derive from it?";
-        $lesson = $this->getOpenAIResponse($lessonPrompt, 150);
+        $lesson = $this->getOpenAIResponse($lessonPrompt, 200);
 
-        // 3. Extract the Bible verses supporting the story.
+        // 3. Generate a title for the story.
+        $titlePrompt = "Based on the story: '" . $story . "' and '" .$selectedCategoryNames. "' then suggest a title for the story. Ensure the title is relevant to the story and within 5 to 10 words.";
+        $title = $this->getOpenAIResponse($titlePrompt, 70);
+
+        // 4. Extract the Bible verses supporting the story.
         $versePrompt = "Based on the story: '" . $story . "' and '" .$selectedCategoryNames. "' then suggest three Bible verses that support the moral lesson. Return the verses in a structured JSON format. Ensure each verse is distinct and relevant to the lesson. Use the following format:
         {
             \"verse1\": {
@@ -172,7 +181,7 @@ class StoryController extends Controller
         ];
 
         $storyModel = GptStory::create([
-            'title' => 'Title Placeholder',
+            'title' => $title,
             'content' => $story,
             'moral_lesson' => $lesson,
         ]);
@@ -188,7 +197,10 @@ class StoryController extends Controller
             ]);
         }
 
-        $request->user()->prompts()->create(['content' => $selectedCategoryNames]);
+        //change this to json $userRequest = $title . ' ' . $selectedCategoryNames;
+        $userRequest = $title . ' ' . $selectedCategoryNames;
+
+        $request->user()->prompts()->create(['content' => $userRequest]);
 
         return back()->with('content', $generatedContent ?? 'No content generated');
 

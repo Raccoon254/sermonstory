@@ -25,8 +25,10 @@ new class extends Component
         </section>
 
         <nav class="flex gap-3">
-            <a href="/">Home</a>
-            <a href="/about">About</a>
+            <a href="{{ route('home') }}" class="{{ Route::currentRouteName() == 'home' ? 'text-blue-500' : '' }}">Home</a>
+            <a href="{{ route('dashboard') }}" class="{{ Route::currentRouteName() == 'dashboard' ? 'text-blue-500' : '' }}">Dashboard</a>
+            <a href="{{ route('stories.index') }}" class="{{ Route::currentRouteName() == 'stories.index' ? 'text-blue-500' : '' }}">Stories</a>
+            <a href="{{ route('about') }}" class="{{ Route::currentRouteName() == 'about' ? 'text-blue-500' : '' }}">About</a>
         </nav>
 
         <section class="flex end justify-end">

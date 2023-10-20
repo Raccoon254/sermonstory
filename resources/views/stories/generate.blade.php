@@ -1,14 +1,23 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 bg-white border-b border-gray-200">
-                <h2 class="font-bold text-xl mb-4">Generate a Story</h2>
+        <div class="overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 bg-gray-50 border-b border-gray-200">
+                <h2 class="font-semibold text-xl mb-4">Generate a Story</h2>
 
                 <form action="{{ route('generate.story') }}" method="post">
                     @csrf
 
+                    <!-- Title -->
                     <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Select Categories (Up to 3):</label>
+                        <label class="block text-gray-700 text-sm font-semibold mb-2" for="title">Enter a title</label>
+                        <input type="text" name="title" id="title" class="border border-gray-300 rounded px-2 py-1 w-full" value="{{ old('title') }}" placeholder="Title eg A story about Joe">
+                        @error('title')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-semibold mb-2">Select Categories (Up to 3):</label>
                         <div class="flex flex-wrap">
                             @foreach($categories as $category)
                                 <button type="button" class="border border-gray-300 rounded px-2 py-1 mr-2 mb-2 focus:outline-none" onclick="toggleCategory(this)" data-category="{{ $category->id }}">{{ $category->name }}</button>
@@ -24,20 +33,35 @@
 
                 <script>
 
-                    var selectedCategories = [];
+                    let selectedCategories = [];
 
                     function toggleCategory(button) {
-                        var categoryId = button.getAttribute("data-category");
-                        var index = selectedCategories.indexOf(categoryId);
+                        let categoryId = button.getAttribute("data-category");
+                        let index = selectedCategories.indexOf(categoryId);
 
                         if (index === -1) {
                             if (selectedCategories.length < 3) {
                                 selectedCategories.push(categoryId);
                                 button.classList.add("bg-blue-500", "text-white");
                             }
+                            if (selectedCategories.length === 3) {
+                                let buttons = document.querySelectorAll('[data-category]');
+                                let unselectedButtons = Array.from(buttons).filter(function (button) {
+                                    return !button.classList.contains("bg-blue-500");
+                                });
+                                unselectedButtons.forEach(function (button) {
+                                    button.setAttribute("disabled", "disabled");
+                                    button.classList.add("bg-gray-200");
+                                });
+                            }
                         } else {
                             selectedCategories.splice(index, 1);
                             button.classList.remove("bg-blue-500", "text-white");
+                            let buttons = document.querySelectorAll('[data-category]');
+                            buttons.forEach(function (button) {
+                                button.removeAttribute("disabled");
+                                button.classList.remove("bg-gray-200");
+                            });
                         }
 
                         // Update the hidden input with selected categories
