@@ -22,12 +22,14 @@ class GptStory extends Model
 
     public function scriptures(): HasMany
     {
-        return $this->hasMany(GptScripture::class);
+        return $this->hasMany(GptScripture::class, 'story_id');
     }
+
 
     public function categoryTags(): BelongsToMany
     {
-        return $this->belongsToMany(GptCategory::class);
+        return $this->belongsToMany(GptCategory::class, 'category_tag_story', 'story_id', 'category_tag_id');
     }
+
 }
 

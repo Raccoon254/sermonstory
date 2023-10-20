@@ -17,7 +17,7 @@
                                 <i class="fa-solid fa-pen-nib"></i> Author Stories
                             </button>
                         </a>
-                        <a href="{{ route('stories.index') }}">
+                        <a href="{{ route('gptstories.index') }}">
                             <button class="btn btn-md btn-outline ring ring-blue-500">
                                 <i class="fa-solid fa-mountain"></i> GPT Stories
                             </button>

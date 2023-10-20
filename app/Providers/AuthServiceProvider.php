@@ -25,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('manage', function ($user) {
             // List of admin emails
-            $adminEmails = ['tomsteve187@gmail.com', 'admin@sermonstories.org'];
+            $adminEmails = ['tomsteve187@gmail.com', 'admin@gmail.com', 'admin@sermonstories.org'];
             return in_array($user->email, $adminEmails);
         });
 

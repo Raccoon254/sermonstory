@@ -40,7 +40,7 @@ Route::get('/generate-story', [StoryController::class, 'generateStory'])->name('
 
 Route::post('/generate-story', [StoryController::class, 'generate'])->name('generate.story')->middleware('auth');
 //resource to GptStoryController
-Route::resource('gptstories', GptStoryController::class)->middleware(['auth', 'verified'])->except(['create', 'edit', 'store', 'update', 'destroy']);
+Route::resource('gptstories', GptStoryController::class)->middleware(['auth', 'verified']);
 
 // The rest of the resource routes
 Route::resource('stories', StoryController::class)->middleware(['auth', 'verified'])->except(['create', 'edit', 'store', 'update', 'destroy']);
