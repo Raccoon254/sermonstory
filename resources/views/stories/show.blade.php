@@ -1,5 +1,5 @@
 <x-app-layout>
-        <div class="min-h-screen flex items-center justify-center bg-cover bg-center relative" style="background-image: url('https://img.freepik.com/free-photo/open-book-blue-background-isolated-closeup_169016-25939.jpg?w=996&t=st=1696513760~exp=1696514360~hmac=6d4a3ef45116ce9a2109de6c49d0103bdca2d1afa630d5bece98af0ceea3c510');">
+        <div class="min-h-screen flex items-center justify-center bg-cover bg-center relative">
             <!-- Use a semi-transparent overlay to make the text more readable -->
             <div class="absolute inset-0 bg-black opacity-40"></div>
 
@@ -27,7 +27,11 @@
                     @endif
 
                     <div class="mt-4">
-                        <a href="{{ route('stories.index') }}" class="btn btn-outline btn-ghost h-10 rounded-0  ring ring-inset ring-white">Back</a>
+                        <a href="{{ route('stories.index') }}">
+                            <button class="btn btn-outline btn-ghost h-10 rounded-0  ring ring-inset ring-white">
+                                <i class="fa-regular fa-circle-left"></i> Back
+                            </button>
+                        </a>
                     </div>
 
                 </div>
