@@ -30,7 +30,7 @@
                     @endif
 
                     <div class="mt-4">
-                        <a href="{{ route('stories.index') }}">
+                        <a href="{{ route('gptstories.index') }}">
                             <button class="btn btn-outline btn-ghost h-10 rounded-0  ring ring-inset ring-white">
                                 <i class="fa-regular fa-circle-left"></i> Back
                             </button>

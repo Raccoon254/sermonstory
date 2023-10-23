@@ -202,7 +202,6 @@ class StoryController extends Controller
 
         $storyModel->categoryTags()->attach($selectedCategoriesArray);
 
-        //change this to json $userRequest = $title . ' ' . $selectedCategoryNames;
         $userRequest = $title . ' ' . $selectedCategoryNames;
 
         $request->user()->prompts()->create(['content' => $userRequest]);
