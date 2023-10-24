@@ -6,7 +6,20 @@
             <div class="relative z-10 max-w-2xl p-6 backdrop-blur-sm bg-base-100 bg-opacity-10 rounded shadow-lg">
                 <h1 class="text-3xl font-semibold mb-4">{{ $story->title }}</h1>
                 <p class="mb-4">{{ $story->content }}</p>
-                <p><strong>Moral Lesson:</strong> {{ $story->moral_lesson }}</p>
+
+                @if($story->moral_lesson)
+                    <div class="mt-4">
+                        <h2 class="text-xl font-semibold mb-2">Moral Lesson:</h2>
+                        <p>{{ $story->moral_lesson }}</p>
+                    </div>
+                @endif
+
+                @if($story->conclusion)
+                    <div class="mt-4">
+                        <h2 class="text-xl font-semibold mb-2">Conclusion:</h2>
+                        <p>{{ $story->conclusion }}</p>
+                    </div>
+                @endif
 
                 @if($story->scriptures->count())
                     <div class="mt-4">

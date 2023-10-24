@@ -45,7 +45,7 @@ class StoryController extends Controller
     public function store(Request $request): RedirectResponse
     {
 
-        $story = Story::create($request->only('title', 'content', 'moral_lesson'));
+        $story = Story::create($request->only('title', 'content', 'moral_lesson', 'conclusion'));
 
         // Save scriptures
         foreach ($request->scriptures as $scriptureContent) {

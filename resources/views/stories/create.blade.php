@@ -16,6 +16,12 @@
                 <input type="text" name="moral_lesson" class="form-control">
             </div>
 
+            <!--Conclusions-->
+            <div class="form-control mb3">
+                <label for="conclusion" class="form-label Conclusions">Conclusion</label>
+                <textarea id="conclusion" name="conclusion" class="form-control" required></textarea>
+            </div>
+
             <div class="form-control w-full" x-data="{ scriptures: [{content: ''}] }">
 
                 <div class="form-control mb-3">
