@@ -1,5 +1,11 @@
 <x-app-layout>
-        <div class="min-h-screen flex items-center justify-center bg-cover bg-center relative">
+
+    <!--title and meta description-->
+    <x-slot name="title">{{ $story->title }}</x-slot>
+    <x-slot name="description">{{ Str::limit($story->content, 160) }}</x-slot> <!-- Limiting description to 160 chars -->
+
+
+    <div class="min-h-screen flex items-center justify-center bg-cover bg-center relative">
             <!-- Use a semi-transparent overlay to make the text more readable -->
             <div class="absolute inset-0 bg-black opacity-40"></div>
 
