@@ -16,6 +16,7 @@ class Story extends Model
         'title',
         'content',
         'moral_lesson',
+        'conclusion',
     ];
 
     public function scriptures(): HasMany
