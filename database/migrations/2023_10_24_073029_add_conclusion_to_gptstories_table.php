@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('gptstories', function (Blueprint $table) {
-            //
+            $table->text('conclusion')->nullable();
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('gptstories', function (Blueprint $table) {
-            //
+            $table->dropColumn('conclusion');
         });
     }
 };
