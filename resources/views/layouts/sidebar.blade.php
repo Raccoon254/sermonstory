@@ -29,20 +29,6 @@
                 </div>
             </a>
 
-            <a href="{{route('service.providers')}}" class="side {{ Route::is(['service.providers','service-providers.show']) ? 'active' : '' }}">
-                <i class="fa-solid fa-gears"></i>
-                <div class="">
-                    Service Providers
-                </div>
-            </a>
-
-            <a href="{{route('reviews.index')}}" class="side {{ Route::is(['reviews.index','reviews.show']) ? 'active' : '' }}">
-                <i class="fa-solid fa-star-half-stroke"></i>
-                <div class="">
-                    Reviews
-                </div>
-            </a>
-
             <a class="side" href="" >
                 <i class="fa-solid fa-bell"></i>
                 <div class="">
@@ -50,12 +36,6 @@
                 </div>
             </a>
 
-            <a href="{{route('scam.index')}}" class="side {{ Route::is(['scam.index','scam.show','scam.create']) ? 'active' : '' }}">
-                <i class="fa-solid text-red-600 fa-triangle-exclamation"></i>
-                <div class="">
-                    Scam Alerts
-                </div>
-            </a>
 
         </div>
     </div>
