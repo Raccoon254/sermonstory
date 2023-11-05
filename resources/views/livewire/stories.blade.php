@@ -4,7 +4,7 @@
         <center class="text-[2.4rem] my-2 font-semibold">Explore Stories</center>
 
         @if (count($filteredStories))
-            <section class="gap-3 flex md:px-56 sm:px-2 flex-col">
+            <section class="gap-3 flex md:px-20 sm:px-2 flex-col">
 
                 <div class="w-full my-2">
                     <div class="w-full relative">
