@@ -22,7 +22,7 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen flex bg-gray-100">
-            <livewire:layout.navigation />
+{{--            <livewire:layout.navigation />--}}
 
             <!-- Page Heading -->
             @if (isset($header))
