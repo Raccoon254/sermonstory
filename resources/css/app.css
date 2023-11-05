@@ -183,3 +183,11 @@ a:hover {
     color: var(--color-theme-1);
 }
 
+.side {
+    @apply duration-200 flex gap-2 items-center hover:bg-blue-700 hover:text-gray-50 p-2 rounded w-full bg-base-200;
+}
+
+.active{
+    @apply bg-gradient-to-r from-orange-700 to-blue-500 text-gray-50 hover:bg-blue-700 hover:text-gray-50;
+}
+
