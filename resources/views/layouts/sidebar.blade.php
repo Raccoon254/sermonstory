@@ -6,7 +6,8 @@
     <div class="z-40 drawer-side">
         <label for="my-drawer" class="drawer-overlay"></label>
         <div class="flex flex-col h-screen border-r border-gray-200 bg-base-100 justify-between">
-c
+
+            <div class="test"></div>
 
             <div class="menu overflow-clip p-4 w-64 backdrop-blur-sm bg-gray-50 bg-opacity-30 text-base-content gap-4 flex flex-col justify-center items-center">
                 <!-- App Logo -->
