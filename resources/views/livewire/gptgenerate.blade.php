@@ -43,6 +43,19 @@ new class extends Component {
         $this->dispatchBrowserEvent('content-generated', ['story' => $generatedStory]);
     }
 
+    private function getOpenAIResponse($prompt, $maxTokens)
+    {
+        $apiKey = ENV('OPENAI_API_KEY');
+        $client = OpenAI::client($apiKey);
+
+        $response = $client->completions()->create([
+            'model' => 'gpt-3.5-turbo-instruct',
+            'prompt' => $prompt,
+            'max_tokens' => $maxTokens,
+        ]);
+
+        return $response['choices'][0]['text'];
+    }
 
 
     public function toggleCategory($categoryId)
