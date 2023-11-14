@@ -39,7 +39,7 @@
                                 <!-- this hidden checkbox controls the state -->
                                 <input class="hidden" type="checkbox" />
 
-                                <i class="fa-solid text-xl text-white fa-bars"></i>
+                                <i class="fa-solid text-xl text-gray-950 fa-bars"></i>
 
                             </label>
                         </section>
