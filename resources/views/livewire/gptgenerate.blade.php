@@ -59,14 +59,18 @@ new class extends Component {
         ]);
 
         // Save the verses
-        $verseData = json_decode( $this->verses, true);
-        foreach ($verseData as $verse) {
+// Decode the JSON string into an array
+        $verseData = json_decode($this->verses, true);
+
+// Iterate through each verse and save it to the database
+        foreach ($verseData as $verseItem) {
             GptScripture::create([
                 'story_id' => $storyModel->id,
-                'verse' => $verse['verse'],
-                'content' => $verse['content'],
+                'verse' => $verseItem['verse'],
+                'content' => $verseItem['passage'], // Make sure to use the correct key here
             ]);
         }
+
 
         $storyModel->categoryTags()->attach($this->selectedCategories);
     }
@@ -163,15 +167,21 @@ new class extends Component {
                 <p>{{ session('content')['story'] }}</p>
             </div>
         @endif
+
+        <div>
+            <h3>Generated Story:</h3>
+            <p>{{ $generatedStory }}</p>
+
+            <h3>Lesson:</h3>
+            <p>{{ $lesson }}</p>
+
+            <h3>Title:</h3>
+            <p>{{ $generatedTitle }}</p>
+
+            <h3>Verses:</h3>
+            <pre>{{ $verses }}</pre>
+        </div>
     </div>
 
-    <script>
-        document.addEventListener('livewire:load', function () {
-            Livewire.on('content-generated', data => {
-                // Update the UI with the generated story
-                console.log(data.story); // Replace this with actual UI update logic
-            });
-        });
-    </script>
 
 </div>
