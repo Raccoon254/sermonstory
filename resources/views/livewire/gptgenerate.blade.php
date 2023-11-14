@@ -24,6 +24,7 @@ new class extends Component {
     {
         // Logic for story generation goes here
         // Use $this->title and $this->selectedCategories but convert array to string first
+        sleep(5);
         $generatedStory = "Story generated based on: {$this->title} and categories: " . implode(',', $this->selectedCategories);
 
         // Assuming session is used to display the generated story
@@ -43,6 +44,15 @@ new class extends Component {
 } ?>
 
 <div class="overflow-hidden shadow-sm sm:rounded-lg">
+
+    <div wire:loading class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center">
+        <div class="text-white flex items-center justify-center text-lg font-semibold">
+            <div class="loader">
+                <i class="fas fa-spinner fa-spin"></i> Loading...
+            </div>
+        </div>
+    </div>
+
     <div class="p-6 bg-gray-50 border-b border-gray-200">
         <h2 class="font-semibold text-xl mb-4">Generate a Story</h2>
         <div>
@@ -80,6 +90,11 @@ new class extends Component {
 
             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                 Generate Story
+
+                <div wire:loading>
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+
             </button>
         </form>
 
