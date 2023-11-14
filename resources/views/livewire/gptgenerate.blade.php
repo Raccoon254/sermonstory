@@ -19,11 +19,6 @@ new class extends Component {
         $this->categories = CategoryTag::all();
     }
 
-    public function increment()
-    {
-        $this->count++;
-    }
-
     public function generate(): void
     {
         $this->validate([
@@ -37,14 +32,15 @@ new class extends Component {
 
         // Generate the story using OpenAI API
         $storyPrompt = "Craft a real-life story related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles. The user's title is '" . $this->title . "'";
-        $generatedStory = $this->getOpenAIResponse($storyPrompt, 300);
+        $generatedStory = $this->getOpenAIResponse($storyPrompt);
 
         // Update the UI with the generated story
         $this->dispatchBrowserEvent('content-generated', ['story' => $generatedStory]);
     }
 
-    private function getOpenAIResponse($prompt, $maxTokens)
+    private function getOpenAIResponse($prompt)
     {
+        $maxTokens = 300;
         $apiKey = ENV('OPENAI_API_KEY');
         $client = OpenAI::client($apiKey);
 
@@ -58,7 +54,7 @@ new class extends Component {
     }
 
 
-    public function toggleCategory($categoryId)
+    public function toggleCategory($categoryId): void
     {
         if (($key = array_search($categoryId, $this->selectedCategories)) !== false) {
             unset($this->selectedCategories[$key]);
