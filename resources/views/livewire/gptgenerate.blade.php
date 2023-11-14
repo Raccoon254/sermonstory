@@ -49,7 +49,20 @@ new class extends Component {
 
         $this->generatedTitle = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory' suggest a title. Ensure it's within 5 to 10 words.", 70);
 
-        $this->verses = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', suggest three Bible verses in JSON format.", 500);
+        $this->verses = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', suggest three Bible verses in JSON format.{
+            \"verse1\": {
+                \"verse\": \"Matthew 1:1\",
+                \"content\": \"Example content for verse 1\"
+            },
+            \"verse2\": {
+                \"verse\": \"Matthew 1:2\",
+                \"content\": \"Example content for verse 2\"
+            },
+            \"verse3\": {
+                \"verse\": \"Matthew 1:3\",
+                \"content\": \"Example content for verse 3\"
+            }
+        }", 500);
 
         // Save the story and associated data to the database
         $storyModel = GptStory::create([
@@ -59,9 +72,13 @@ new class extends Component {
         ]);
 
 
+        //if verses is null, set it to empty array
+        if($this->verses == null){
+            $this->verses = "[]";
+        }
+
         $verseData = json_decode($this->verses, true);
 
-        // Iterate through each verse and save it to the database
         foreach ($verseData as $verseItem) {
             GptScripture::create([
                 'story_id' => $storyModel->id,
