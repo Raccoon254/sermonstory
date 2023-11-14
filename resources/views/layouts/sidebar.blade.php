@@ -29,14 +29,14 @@
                 </div>
             </a>
 
-            <a class="side" href="{{ route('stories.index') }}" >
+            <a href="{{ route('stories.index') }}" class="side {{ Route::is('stories.index') ? 'active' : '' }}">
                 <i class="fa-solid fa-book"></i>
                 <div class="">
                     Stories
                 </div>
             </a>
 
-            <a class="side" href="{{ route('about') }}" >
+            <a href="{{ route('about') }}" class="side {{ Route::is('about') ? 'active' : '' }}">
                 <i class="fa-solid fa-info"></i>
                 <div class="">
                     About
@@ -45,7 +45,7 @@
 
             @can('manage')
 
-                <a class="side" href="{{ route('stories.create') }}" >
+                <a href="{{ route('stories.create') }}" class="side {{ Route::is('stories.create') ? 'active' : '' }}">
                     <i class="fa-solid fa-plus"></i>
                     <div class="">
                         Create
@@ -55,7 +55,7 @@
             @endcan
 
 
-            <a class="side" href="" >
+            <a class="side" href="">
                 <i class="fa-solid fa-bell"></i>
                 <div class="">
                     Notifications
