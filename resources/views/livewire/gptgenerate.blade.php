@@ -58,16 +58,15 @@ new class extends Component {
             'moral_lesson' =>  $this->lesson,
         ]);
 
-        // Save the verses
-// Decode the JSON string into an array
+
         $verseData = json_decode($this->verses, true);
 
-// Iterate through each verse and save it to the database
+        // Iterate through each verse and save it to the database
         foreach ($verseData as $verseItem) {
             GptScripture::create([
                 'story_id' => $storyModel->id,
                 'verse' => $verseItem['verse'],
-                'content' => $verseItem['passage'], // Make sure to use the correct key here
+                'content' => $verseItem['content'],
             ]);
         }
 
