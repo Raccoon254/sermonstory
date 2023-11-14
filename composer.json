@@ -12,7 +12,7 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
         "livewire/volt": "^1.0",
-        "openai-php/client": "^0.7.3",
+        "openai-php/client": "^0.7.9",
         "symfony/polyfill-php80": "^1.28"
     },
     "require-dev": {

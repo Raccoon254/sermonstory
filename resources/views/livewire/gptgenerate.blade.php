@@ -4,6 +4,8 @@ use function Livewire\Volt\{state};
 use Livewire\Volt\Component;
 use App\Models\CategoryTag;
 use Livewire\Attributes\Rule;
+use App\Models\GptStory;
+use App\Models\GptScripture;
 
 new class extends Component {
 
