@@ -11,7 +11,6 @@ new class extends Component {
     public $title = '';
     #[Rule('required|array|min:1|max:3')]
     public $selectedCategories = [];
-    public $count = 0;
     public $categories;
 
     public function mount()
@@ -34,8 +33,7 @@ new class extends Component {
         $storyPrompt = "Craft a real-life story related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles. The user's title is '" . $this->title . "'";
         $generatedStory = $this->getOpenAIResponse($storyPrompt);
 
-        // Update the UI with the generated story
-        $this->dispatchBrowserEvent('content-generated', ['story' => $generatedStory]);
+
     }
 
     private function getOpenAIResponse($prompt)
@@ -129,4 +127,14 @@ new class extends Component {
             </div>
         @endif
     </div>
+
+    <script>
+        document.addEventListener('livewire:load', function () {
+            Livewire.on('content-generated', data => {
+                // Update the UI with the generated story
+                console.log(data.story); // Replace this with actual UI update logic
+            });
+        });
+    </script>
+
 </div>
