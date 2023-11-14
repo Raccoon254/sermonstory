@@ -34,20 +34,48 @@ new class extends Component {
             'selectedCategories' => 'required|array|min:1|max:3',
         ]);
 
-        // Get the category names based on the selected IDs
-        $selectedCategories = CategoryTag::whereIn('id', $this->selectedCategories)->pluck('name')->toArray();
-        $selectedCategoryNames = implode(' and ', $selectedCategories);
+        // Convert selected category IDs to names
+        $categoryNames = CategoryTag::whereIn('id', $this->selectedCategories)
+            ->pluck('name')
+            ->toArray();
 
-        // Generate the story using OpenAI API
-        $storyPrompt = "Craft a real-life story related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles. The user's title is '" . $this->title . "'";
-        $generatedStory = $this->getOpenAIResponse($storyPrompt);
+        // Generate the story and associated content
+        $generatedStory = $this->getOpenAIResponse("Craft a real-life story related to '" . implode(' and ', $categoryNames) . "'. Ensure the story is within 100 to 150 words.", 300);
+        $lesson = $this->getOpenAIResponse("Based on the story: '$generatedStory', what moral lesson can we derive from it?", 200);
+        $generatedTitle = $this->getOpenAIResponse("Based on the story: '$generatedStory' suggest a title. Ensure it's within 5 to 10 words.", 70);
+        $verses = $this->getOpenAIResponse("Based on the story: '$generatedStory', suggest three Bible verses in JSON format.", 500);
 
+        // Save the story and associated data to the database
+        $storyModel = GptStory::create([
+            'title' => $generatedTitle,
+            'content' => $generatedStory,
+            'moral_lesson' => $lesson,
+        ]);
 
+        // Save the verses
+        $verseData = json_decode($verses, true);
+        foreach ($verseData as $verse) {
+            GptScripture::create([
+                'story_id' => $storyModel->id,
+                'verse' => $verse['verse'],
+                'content' => $verse['content'],
+            ]);
+        }
+
+        $storyModel->categoryTags()->attach($this->selectedCategories);
+
+        // Update the UI with the generated content
+        $this->dispatchBrowserEvent('storyGenerated', [
+            'story' => $generatedStory,
+            'lesson' => $lesson,
+            'title' => $generatedTitle,
+            'verses' => $verses
+        ]);
     }
 
-    private function getOpenAIResponse($prompt)
+    private function getOpenAIResponse($prompt, $maxTokens)
     {
-        $maxTokens = 300;
+        // Assuming you have set up a service for OpenAI API calls
         $apiKey = ENV('OPENAI_API_KEY');
         $client = OpenAI::client($apiKey);
 
@@ -59,7 +87,6 @@ new class extends Component {
 
         return $response['choices'][0]['text'];
     }
-
 
     public function toggleCategory($categoryId): void
     {
