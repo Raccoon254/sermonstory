@@ -3,9 +3,13 @@
 use function Livewire\Volt\{state};
 use Livewire\Volt\Component;
 use App\Models\CategoryTag;
+use Livewire\Attributes\Rule;
 
 new class extends Component {
+
+    #[Rule('required|min:5')]
     public $title = '';
+    #[Rule('required|array|min:1|max:3')]
     public $selectedCategories = [];
     public $count = 0;
     public $categories;
@@ -20,16 +24,26 @@ new class extends Component {
         $this->count++;
     }
 
-    public function generate()
+    public function generate(): void
     {
-        // Logic for story generation goes here
-        // Use $this->title and $this->selectedCategories but convert array to string first
-        sleep(5);
-        $generatedStory = "Story generated based on: {$this->title} and categories: " . implode(',', $this->selectedCategories);
+        $this->validate([
+            'title' => 'required|min:5',
+            'selectedCategories' => 'required|array|min:1|max:3',
+        ]);
 
-        // Assuming session is used to display the generated story
-        session(['content' => ['story' => $generatedStory]]);
+        // Get the category names based on the selected IDs
+        $selectedCategories = CategoryTag::whereIn('id', $this->selectedCategories)->pluck('name')->toArray();
+        $selectedCategoryNames = implode(' and ', $selectedCategories);
+
+        // Generate the story using OpenAI API
+        $storyPrompt = "Craft a real-life story related to '" . $selectedCategoryNames . "'. Ensure the story is within 100 to 150 words and carries a moral lesson that can be related to biblical principles. The user's title is '" . $this->title . "'";
+        $generatedStory = $this->getOpenAIResponse($storyPrompt, 300);
+
+        // Update the UI with the generated story
+        $this->dispatchBrowserEvent('content-generated', ['story' => $generatedStory]);
     }
+
+
 
     public function toggleCategory($categoryId)
     {
@@ -43,22 +57,18 @@ new class extends Component {
     }
 } ?>
 
-<div class="overflow-hidden shadow-sm sm:rounded-lg">
+<div class="overflow-hidden rounded shadow-sm">
 
-    <div wire:loading class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center">
-        <div class="text-white flex items-center justify-center text-lg font-semibold">
+    <div wire:loading class="fixed top-0 left-0 w-full h-full bg-gray-300 backdrop-blur-sm bg-opacity-80 z-50 flex justify-center items-center">
+        <div class="text-white flex items-center h-full justify-center text-lg font-semibold">
             <div class="loader">
-                <i class="fas fa-spinner fa-spin"></i> Loading...
+                <span class="loading bg-orange-800 loading-ring loading-lg"></span>
             </div>
         </div>
     </div>
 
-    <div class="p-6 bg-gray-50 border-b border-gray-200">
-        <h2 class="font-semibold text-xl mb-4">Generate a Story</h2>
-        <div>
-            <h1>Count {{ $count }}</h1>
-            <button class="btn" wire:click="increment">ADD</button>
-        </div>
+    <div class="p-2 sm:p-4 bg-gray-50 border-b border-gray-200">
+        <h2 class="font-semibold text-center text-xl sm:text-2xl mb-4">Generate a Story</h2>
         <form wire:submit.prevent="generate">
             @csrf
 
@@ -74,28 +84,32 @@ new class extends Component {
             <!-- Categories -->
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-semibold mb-2">Select Categories (Up to 3):</label>
-                <div class="flex flex-wrap">
+                <div class="flex flex-wrap relative">
                     @foreach($categories as $category)
                         <button type="button"
                                 wire:click="toggleCategory({{ $category->id }})"
-                                class="border rounded px-2 py-1 mr-2 mb-2 focus:outline-none
+                                class="border rounded px-2 py-1 mr-1 mb-1 focus:outline-none
                            {{ in_array($category->id, $selectedCategories) ? 'bg-blue-500 text-white' : 'border-gray-300' }}
                            {{ count($selectedCategories) >= 3 && !in_array($category->id, $selectedCategories) ? 'bg-gray-200' : '' }}">
                             {{ $category->name }}
                         </button>
                     @endforeach
                 </div>
+
+                @error('selectedCategories')
+                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
                 <input type="hidden" name="selected_categories" value="{{ implode(',', $selectedCategories) }}">
             </div>
 
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <x-secondary-button type="submit" class="ring-blue-500 ring-2 hover:bg-gray-100">
                 Generate Story
 
                 <div wire:loading>
                     <i class="fas fa-spinner fa-spin"></i>
                 </div>
 
-            </button>
+            </x-secondary-button>
         </form>
 
         <!-- Display generated story -->
