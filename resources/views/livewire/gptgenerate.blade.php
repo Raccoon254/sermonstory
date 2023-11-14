@@ -12,7 +12,6 @@ use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use OpenAI;
 
 new class extends Component {
 
@@ -21,8 +20,12 @@ new class extends Component {
     #[Rule('required|array|min:1|max:3')]
     public $selectedCategories = [];
     public $categories;
+    public $generatedStory = '';
+    public $lesson = '';
+    public $generatedTitle = '';
+    public $verses = '';
 
-    public function mount()
+    public function mount(): void
     {
         $this->categories = CategoryTag::all();
     }
@@ -40,20 +43,23 @@ new class extends Component {
             ->toArray();
 
         // Generate the story and associated content
-        $generatedStory = $this->getOpenAIResponse("Craft a real-life story related to '" . implode(' and ', $categoryNames) . "'. Ensure the story is within 100 to 150 words.", 300);
-        $lesson = $this->getOpenAIResponse("Based on the story: '$generatedStory', what moral lesson can we derive from it?", 200);
-        $generatedTitle = $this->getOpenAIResponse("Based on the story: '$generatedStory' suggest a title. Ensure it's within 5 to 10 words.", 70);
-        $verses = $this->getOpenAIResponse("Based on the story: '$generatedStory', suggest three Bible verses in JSON format.", 500);
+        $this->generatedStory = $this->getOpenAIResponse("Craft a real-life story related to '" . implode(' and ', $categoryNames) . "'. Ensure the story is within 100 to 150 words.", 300);
+
+        $this->lesson = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', what moral lesson can we derive from it?", 200);
+
+        $this->generatedTitle = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory' suggest a title. Ensure it's within 5 to 10 words.", 70);
+
+        $this->verses = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', suggest three Bible verses in JSON format.", 500);
 
         // Save the story and associated data to the database
         $storyModel = GptStory::create([
-            'title' => $generatedTitle,
-            'content' => $generatedStory,
-            'moral_lesson' => $lesson,
+            'title' =>  $this->generatedTitle,
+            'content' =>  $this->generatedStory,
+            'moral_lesson' =>  $this->lesson,
         ]);
 
         // Save the verses
-        $verseData = json_decode($verses, true);
+        $verseData = json_decode( $this->verses, true);
         foreach ($verseData as $verse) {
             GptScripture::create([
                 'story_id' => $storyModel->id,
@@ -63,15 +69,9 @@ new class extends Component {
         }
 
         $storyModel->categoryTags()->attach($this->selectedCategories);
-
-        // Update the UI with the generated content
-        $this->dispatchBrowserEvent('storyGenerated', [
-            'story' => $generatedStory,
-            'lesson' => $lesson,
-            'title' => $generatedTitle,
-            'verses' => $verses
-        ]);
     }
+
+
 
     private function getOpenAIResponse($prompt, $maxTokens)
     {
@@ -98,7 +98,8 @@ new class extends Component {
             }
         }
     }
-} ?>
+}
+?>
 
 <div class="overflow-hidden rounded shadow-sm">
 
