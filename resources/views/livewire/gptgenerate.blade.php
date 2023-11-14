@@ -6,6 +6,13 @@ use App\Models\CategoryTag;
 use Livewire\Attributes\Rule;
 use App\Models\GptStory;
 use App\Models\GptScripture;
+use App\Models\Prompt;
+use App\Models\Story;
+use GuzzleHttp\Client;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use OpenAI;
 
 new class extends Component {
 
