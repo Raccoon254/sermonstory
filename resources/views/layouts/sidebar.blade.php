@@ -33,7 +33,7 @@
                 </a>
 
                 <a href="{{ route('about') }}" class="side {{ Route::is('about') ? 'active' : '' }}">
-                    <i class="fa-solid fa-info"></i>
+                    <i class="fa-regular fa-circle-question"></i>
                     <div class="">
                         About
                     </div>

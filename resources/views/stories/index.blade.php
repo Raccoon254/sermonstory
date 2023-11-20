@@ -1,6 +1,7 @@
 <x-app-layout>
-
     <section class="mt-2">
-        @livewire('stories')
+@livewire('livestories')
+
+{{--        @livewire('stories')--}}
     </section>
 </x-app-layout>
