@@ -204,9 +204,7 @@ a:hover {
 .ring{
     @apply ring-1 ring-offset-1;
 }
-
-a{
-    /*no underline*/
+    /*no underline for a class btn*/
+.btn{
     text-decoration: none !important;
 }
-

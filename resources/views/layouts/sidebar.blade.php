@@ -32,12 +32,6 @@
                     </div>
                 </a>
 
-                <a href="{{ route('about') }}" class="side {{ Route::is('about') ? 'active' : '' }}">
-                    <i class="fa-regular fa-circle-question"></i>
-                    <div class="">
-                        About
-                    </div>
-                </a>
 
                 @can('manage')
 
@@ -60,6 +54,21 @@
                     <i class="fa-regular fa-circle-user"></i>
                     <div class="">
                         Profile
+                    </div>
+                </a>
+
+                <a href="{{ route('about') }}" class="side {{ Route::is('about') ? 'active' : '' }}">
+                    <i class="fa-regular fa-circle-question"></i>
+                    <div class="">
+                        About
+                    </div>
+                </a>
+
+                <!-- Contact -->
+                <a href="{{ route('contact') }}" class="side {{ Route::is('contact') ? 'active' : '' }}">
+                    <i class="fa-regular fa-address-book"></i>
+                    <div class="">
+                        Contact
                     </div>
                 </a>
 

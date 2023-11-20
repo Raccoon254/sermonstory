@@ -107,7 +107,7 @@ new #[Layout('layouts.guest')] class extends Component
                 </a>
             @endif
 
-            <button class="btn btn-warning ring ring-blue-600 ring-inset ml-3">
+            <button class="btn btn-secondary w-1/2 ring ring-blue-600 ring-inset ml-3">
                 {{ __('Log in') }}
             </button>
         </div>

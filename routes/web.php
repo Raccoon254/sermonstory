@@ -52,4 +52,7 @@ Route::get('/coming-soon', function () {return view('coming-soon');})->name('com
 //logout
 Route::POST('/logout', function () {Auth::logout();return redirect('/');})->name('logout');
 
+//contact
+Route::get('/contact', function () {return view('contact');})->name('contact');
+
 require __DIR__.'/auth.php';
