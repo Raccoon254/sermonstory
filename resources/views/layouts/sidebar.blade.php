@@ -49,7 +49,7 @@
                     </a>
                 @endcan
 
-                <a class="side" href="">
+                <a class="side" href="{{ route('coming-soon') }}">
                     <i class="fa-solid fa-bell"></i>
                     <div class="">
                         Notifications

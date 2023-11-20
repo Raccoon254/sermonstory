@@ -45,10 +45,11 @@ Route::resource('gptstories', GptStoryController::class)->middleware(['auth', 'v
 
 // The rest of the resource routes
 Route::resource('stories', StoryController::class)->middleware(['auth', 'verified'])->except(['create', 'edit', 'store', 'update', 'destroy']);
+
+//coming-soon
+Route::get('/coming-soon', function () {return view('coming-soon');})->name('coming-soon');
+
 //logout
-Route::POST('/logout', function () {
-    Auth::logout();
-    return redirect('/');
-})->name('logout');
+Route::POST('/logout', function () {Auth::logout();return redirect('/');})->name('logout');
 
 require __DIR__.'/auth.php';
