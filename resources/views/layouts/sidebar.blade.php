@@ -39,13 +39,6 @@
                     </div>
                 </a>
 
-                <a href="{{ route('profile') }}" class="side {{ Route::is('profile') ? 'active' : '' }}">
-                    <i class="fa-regular fa-circle-user"></i>
-                    <div class="">
-                        Profile
-                    </div>
-                </a>
-
                 @can('manage')
 
                     <a href="{{ route('stories.create') }}" class="side {{ Route::is('stories.create') ? 'active' : '' }}">
@@ -54,8 +47,15 @@
                             Create
                         </div>
                     </a>
-
                 @endcan
+
+                <a href="{{ route('profile') }}" class="side {{ Route::is('profile') ? 'active' : '' }}">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <div class="">
+                        Profile
+                    </div>
+                </a>
+
 
 
                 <a class="side" href="">
