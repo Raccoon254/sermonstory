@@ -20,12 +20,6 @@
                     </div>
                 @endif
 
-                @if($story->conclusion)
-                    <div class="mt-4">
-                        <h2 class="text-xl font-semibold mb-2">Conclusion:</h2>
-                        <p>{{ $story->conclusion }}</p>
-                    </div>
-                @endif
 
                 @if($story->scriptures->count())
                     <div class="mt-4">
@@ -33,6 +27,13 @@
                         @foreach($story->scriptures as $scripture)
                             <p class="mb-2">{{ $scripture->content }}</p>
                         @endforeach
+                    </div>
+                @endif
+
+                @if($story->conclusion)
+                    <div class="mt-4">
+                        <h2 class="text-xl font-semibold mb-2">Conclusion:</h2>
+                        <p>{{ $story->conclusion }}</p>
                     </div>
                 @endif
 
