@@ -49,15 +49,6 @@
                     </a>
                 @endcan
 
-                <a href="{{ route('profile') }}" class="side {{ Route::is('profile') ? 'active' : '' }}">
-                    <i class="fa-regular fa-circle-user"></i>
-                    <div class="">
-                        Profile
-                    </div>
-                </a>
-
-
-
                 <a class="side" href="">
                     <i class="fa-solid fa-bell"></i>
                     <div class="">
@@ -65,8 +56,15 @@
                     </div>
                 </a>
 
+                <a href="{{ route('profile') }}" class="side {{ Route::is('profile') ? 'active' : '' }}">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <div class="">
+                        Profile
+                    </div>
+                </a>
 
             </div>
+
             <div class="menu overflow-clip p-4 w-64 backdrop-blur-sm bg-gray-50 bg-opacity-30 text-base-content gap-4 flex flex-col justify-center items-center">
                 <!--Logout-->
                 @if(auth()->user())
