@@ -189,8 +189,8 @@ a:hover {
 }
 
 .side {
-    @apply duration-200 flex gap-2 items-center hover:bg-blue-700 hover:text-gray-50 p-2 rounded w-full bg-base-200;
-    border: 1px solid rgba(138, 43, 226, 0.22);
+    @apply duration-200 flex gap-2 items-center hover:bg-blue-700 hover:text-gray-50 p-2 rounded w-full bg-gray-100;
+    border: 1px solid rgba(158, 74, 235, 0.11);
 }
 
 .active{

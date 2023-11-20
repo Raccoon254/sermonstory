@@ -5,7 +5,7 @@
     </div>
     <div class="z-40 drawer-side">
         <label for="my-drawer" class="drawer-overlay"></label>
-        <div class="flex flex-col h-screen border-r border-gray-200 bg-base-100 justify-between">
+        <div class="flex flex-col h-screen border-r border-gray-200 bg-gray-100 justify-between">
 
             <div class="test"></div>
 

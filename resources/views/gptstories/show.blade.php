@@ -1,9 +1,9 @@
 <x-app-layout>
         <div class="min-h-screen flex items-center justify-center bg-cover bg-center relative">
             <!-- Use a semi-transparent overlay to make the text more readable -->
-            <div class="absolute inset-0 bg-black opacity-40"></div>
+            <div class="absolute inset-0 bg-gray-50 rounded"></div>
 
-            <div class="relative z-10 max-w-2xl p-6 my-5  backdrop-blur-sm bg-base-100 bg-opacity-10 rounded shadow-lg">
+            <div class="relative z-10 max-w-2xl p-6 my-5  backdrop-blur-sm bg-gray-100 bg-opacity-10 rounded shadow-sm">
 
                 <h1 class="text-3xl font-semibold mb-4">{{ $story->title }}</h1>
                 <p class="mb-4">{{ $story->content }}</p>

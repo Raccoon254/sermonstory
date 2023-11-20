@@ -6,12 +6,7 @@ use App\Models\CategoryTag;
 use Livewire\Attributes\Rule;
 use App\Models\GptStory;
 use App\Models\GptScripture;
-use App\Models\Prompt;
-use App\Models\Story;
-use GuzzleHttp\Client;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 new class extends Component {
 
@@ -24,6 +19,7 @@ new class extends Component {
     public $lesson = '';
     public $generatedTitle = '';
     public $verses = '';
+    public bool $showStory = false;
 
     public function mount(): void
     {
@@ -32,10 +28,16 @@ new class extends Component {
 
     public function generate(): void
     {
+        $this->showStory = false;
+
         $this->validate([
             'title' => 'required|min:5',
             'selectedCategories' => 'required|array|min:1|max:3',
         ]);
+
+        DB::beginTransaction();
+
+        try {
 
         // Convert selected category IDs to names
         $categoryNames = CategoryTag::whereIn('id', $this->selectedCategories)
@@ -44,6 +46,8 @@ new class extends Component {
 
         // Generate the story and associated content
         $this->generatedStory = $this->getOpenAIResponse("Craft a real-life story related to '" . implode(' and ', $categoryNames) . "'. Ensure the story is within 100 to 150 words.", 300);
+
+        $this->showStory = true;
 
         $this->lesson = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', what moral lesson can we derive from it?", 200);
 
@@ -79,16 +83,28 @@ new class extends Component {
 
         $verseData = json_decode($this->verses, true);
 
-        foreach ($verseData as $verseItem) {
-            GptScripture::create([
-                'story_id' => $storyModel->id,
-                'verse' => $verseItem['verse'],
-                'content' => $verseItem['content'],
-            ]);
+        if ($verseData == null) {
+            $verseData = [];
+        }else{
+            foreach ($verseData as $verseItem) {
+                GptScripture::create([
+                    'story_id' => $storyModel->id,
+                    'verse' => $verseItem['verse'],
+                    'content' => $verseItem['content'],
+                ]);
+            }
         }
 
 
         $storyModel->categoryTags()->attach($this->selectedCategories);
+            DB::commit();
+
+            // UI update logic...
+        } catch (Exception $e) {
+            DB::rollBack();
+            // Handle the exception, e.g., log the error or return an error message
+        }
+
     }
 
 
@@ -152,7 +168,7 @@ new class extends Component {
                     @foreach($categories as $category)
                         <button type="button"
                                 wire:click="toggleCategory({{ $category->id }})"
-                                class="border rounded px-2 py-1 mr-1 mb-1 focus:outline-none
+                                class="border text-sm hover:bg-blue-400 rounded px-2 py-1 mr-1 mb-1 focus:outline-none
                            {{ in_array($category->id, $selectedCategories) ? 'bg-blue-500 text-white' : 'border-gray-300' }}
                            {{ count($selectedCategories) >= 3 && !in_array($category->id, $selectedCategories) ? 'bg-gray-200' : '' }}">
                             {{ $category->name }}
@@ -177,26 +193,32 @@ new class extends Component {
         </form>
 
         <!-- Display generated story -->
-        @if(session('content'))
-            <div class="mt-8 bg-gray-100 p-6 rounded border border-gray-200">
-                <h3 class="font-bold text-lg mb-4">Generated Story:</h3>
-                <p>{{ session('content')['story'] }}</p>
+
+        <!--if showStory is true, display the story-->
+
+        @if($showStory)
+            <div class="p-2 bg-gray-100 flex flex-col gap-3 rounded mt-4">
+                <div class="top mb-2">
+                    <h3 class="text-center text-2xl font-semibold">{{ $generatedTitle }}</h3>
+                    <p>
+                        {{ $generatedStory }}
+                    </p>
+                </div>
+                <div class="mid mb-2">
+                    <h3 class="text-center text-2xl font-semibold">Moral Lesson</h3>
+                    <p>
+                        {{ $lesson }}
+                    </p>
+                </div>
+
+                <div class="Bottom">
+
+                    <h3 class="text-center text-2xl font-semibold">Verses</h3>
+                    <pre>{{ $verses }}</pre>
+                </div>
             </div>
         @endif
 
-        <div>
-            <h3>Generated Story:</h3>
-            <p>{{ $generatedStory }}</p>
-
-            <h3>Lesson:</h3>
-            <p>{{ $lesson }}</p>
-
-            <h3>Title:</h3>
-            <p>{{ $generatedTitle }}</p>
-
-            <h3>Verses:</h3>
-            <pre>{{ $verses }}</pre>
-        </div>
     </div>
 
 
