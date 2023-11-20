@@ -197,3 +197,16 @@ a:hover {
     @apply bg-gradient-to-r from-blue-800 to-orange-700 text-gray-50 hover:bg-blue-700 hover:text-gray-50;
 }
 
+.btn{
+    @apply normal-case
+}
+
+.ring{
+    @apply ring-1 ring-offset-1;
+}
+
+a{
+    /*no underline*/
+    text-decoration: none !important;
+}
+
