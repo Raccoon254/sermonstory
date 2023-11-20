@@ -21,11 +21,10 @@ class ContactController extends Controller
             'phone' => 'required',
             'message' => 'required',
         ]);
+        $admins = User::whereIn('email', ['tomsteve187@gmail.com', 'info@sermonstories.org', 'joe@sermonstories.org'])->get();
 
         try {
             $contact = Contact::create($request->all());
-
-            $admins = User::whereIn('email', ['tomsteve187@gmail.com', 'info@sermonstories.org', 'joe@sermonstories.org'])->get();
 
             foreach ($admins as $admin) {
                 Mail::to($admin->email)->send(new ContactFormSubmitted($contact));
@@ -33,11 +32,18 @@ class ContactController extends Controller
 
             return back()->with('success', 'Your message has been sent successfully.');
         } catch (Exception $e) {
+            $contact= new Contact();
+            $contact->first_name = $request->first_name;
+            $contact->last_name = $request->last_name;
+            $contact->email = $request->email;
+            $contact->phone = $request->phone;
+            $contact->message = $request->message.' Error Saving '.$e->getMessage();
+
             foreach ($admins as $admin) {
-                Mail::to($admin->email)->send(new ContactFormSubmitted($e->getMessage()));
+                Mail::to($admin->email)->send(new ContactFormSubmitted($contact));
             }
 
-            return back()->with('error', 'There was an error processing your request.');
+            return back()->with('warning', 'Your message has been sent successfully. We will get back to you soon.');
         }
     }
 }

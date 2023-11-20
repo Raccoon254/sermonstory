@@ -11,6 +11,12 @@
     </div>
 @endif
 
+@if(session('warning'))
+    <div class="alert rounded mt-3 bg-yellow-500 alert-warning">
+        {{ session('warning') }}
+    </div>
+@endif
+
 @if ($errors->any())
     <div class="alert rounded mt-3 bg-red-500 alert-danger">
         <ul>
