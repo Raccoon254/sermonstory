@@ -70,11 +70,12 @@
             <div class="menu overflow-clip p-4 w-64 backdrop-blur-sm bg-gray-50 bg-opacity-30 text-base-content gap-4 flex flex-col justify-center items-center">
                 <!--Logout-->
                 @if(auth()->user())
-                    <form wire:submit.prevent="logout" class="side d-inline ring bg-blue-300">
-                        <i class="fa-solid fa-sign-out"></i>
-                        <div class="">
+                    <form class="w-full" action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button class="side d-inline ring bg-blue-300">
+                            <i class="fa-solid fa-sign-out"></i>
                             Logout
-                        </div>
+                        </button>
                     </form>
                 @endif
             </div>

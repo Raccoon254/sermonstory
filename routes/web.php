@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GptStoryController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoryController;
 use Livewire\Volt\Volt;
@@ -44,6 +45,10 @@ Route::resource('gptstories', GptStoryController::class)->middleware(['auth', 'v
 
 // The rest of the resource routes
 Route::resource('stories', StoryController::class)->middleware(['auth', 'verified'])->except(['create', 'edit', 'store', 'update', 'destroy']);
-
+//logout
+Route::POST('/logout', function () {
+    Auth::logout();
+    return redirect('/');
+})->name('logout');
 
 require __DIR__.'/auth.php';
