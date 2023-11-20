@@ -194,6 +194,6 @@ a:hover {
 }
 
 .active{
-    @apply bg-gradient-to-r from-orange-700 to-blue-500 text-gray-50 hover:bg-blue-700 hover:text-gray-50;
+    @apply bg-gradient-to-r from-blue-800 to-orange-700 text-gray-50 hover:bg-blue-700 hover:text-gray-50;
 }
 

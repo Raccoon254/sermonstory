@@ -18,7 +18,7 @@
                 </div>
 
                 <!-- Sidebar content here -->
-                <a href="{{ route('dashboard') }}" class="side {{ Route::is('home') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="side {{ Route::is('dashboard') ? 'active' : '' }}">
                     <i class="fa-solid fa-home-lg"></i>
                     <div class="">
                         Dashboard
