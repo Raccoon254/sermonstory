@@ -44,6 +44,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function isAdmin(): bool
+    {
+        return $this->email === 'tomsteve187@gmail.com'|| $this->email === 'info@sermonstories.org' || $this->email === 'joe@sermonstories.org';
+    }
+
     public function prompts(): HasMany
     {
         return $this->hasMany(Prompt::class);
