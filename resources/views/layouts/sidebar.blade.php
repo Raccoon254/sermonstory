@@ -18,17 +18,10 @@
                 </div>
 
                 <!-- Sidebar content here -->
-                <a href="{{ route('home') }}" class="side {{ Route::is('home') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="side {{ Route::is('home') ? 'active' : '' }}">
                     <i class="fa-solid fa-home-lg"></i>
                     <div class="">
                         Dashboard
-                    </div>
-                </a>
-
-                <a href="{{ route('profile') }}" class="side {{ Route::is('profile') ? 'active' : '' }}">
-                    <i class="fa-regular fa-circle-user"></i>
-                    <div class="">
-                        Profile
                     </div>
                 </a>
 
@@ -43,6 +36,13 @@
                     <i class="fa-solid fa-info"></i>
                     <div class="">
                         About
+                    </div>
+                </a>
+
+                <a href="{{ route('profile') }}" class="side {{ Route::is('profile') ? 'active' : '' }}">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <div class="">
+                        Profile
                     </div>
                 </a>
 
@@ -72,7 +72,7 @@
                 @if(auth()->user())
                     <form class="w-full" action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button class="side d-inline ring bg-blue-300">
+                        <button class="side d-inline ring-1 ring-offset-1 bg-blue-500">
                             <i class="fa-solid fa-sign-out"></i>
                             Logout
                         </button>
