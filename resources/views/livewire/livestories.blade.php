@@ -110,5 +110,8 @@ $performSearch = function () {
                 <center>No stories found</center>
             </div>
         @endif
+        <section class="gap-3 flex md:px-20 sm:px-2 flex-col">
+        <livewire:gptgenerate />
+        </section>
     </section>
     </div>

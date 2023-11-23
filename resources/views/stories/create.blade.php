@@ -22,22 +22,37 @@
                 <textarea id="conclusion" name="conclusion" class="form-control" required></textarea>
             </div>
 
-            <div class="form-control w-full" x-data="{ scriptures: [{content: ''}] }">
-
+            <div class="form-control w-full">
                 <div class="form-control mb-3">
                     <label class="form-label">Scriptures</label>
-
-                    <template x-for="(scripture, index) in scriptures" :key="index">
-                        <div class="mb-2 flex">
-                            <input x-model="scripture.content" type="text" name="scriptures[]" class="w-full form-control">
-                            <span class="btn rounded-[0px] btn-warning" x-show="index === scriptures.length - 1" @click="scriptures.push({content: ''})">Add</span>
-                            <span class="btn rounded-[0px] bg-red-600" x-show="scriptures.length > 1" @click="scriptures.splice(index, 1)">DEL</span>
+                    <div id="scripture-container">
+                        <!-- Initial scripture input -->
+                        <div class="mb-2 flex scripture-field">
+                            <input type="text" name="scriptures[]" class="w-full form-control">
+                            <span class="btn rounded-[0px] btn-warning" onclick="addScriptureField()">Add</span>
                         </div>
-                    </template>
+                        <script>
+                            function addScriptureField() {
+                                const container = document.getElementById('scripture-container');
+                                const newField = document.createElement('div');
+                                newField.classList.add('mb-2', 'flex', 'scripture-field');
+                                newField.innerHTML = `
+        <input type="text" name="scriptures[]" class="w-full form-control">
+        <span class="btn rounded-[0px] bg-red-600" onclick="removeScriptureField(this)">DEL</span>
+    `;
 
+                                container.appendChild(newField);
+                            }
+
+                            function removeScriptureField(element) {
+                                element.parentElement.remove();
+                            }
+
+                        </script>
+                    </div>
                 </div>
-
             </div>
+
 
             <div class="form-control">
                 <label class="form-label mb-3">Category Tags</label>

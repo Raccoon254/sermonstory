@@ -90,6 +90,7 @@
                 <center>No stories found</center>
             </div>
         @endif
+
     </section>
 
 </div>

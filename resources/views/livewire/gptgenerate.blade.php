@@ -18,6 +18,7 @@ new class extends Component {
     public $generatedStory = '';
     public $lesson = '';
     public $generatedTitle = '';
+    public $conclusion = '';
     public $verses = '';
     public bool $showStory = false;
 
@@ -49,6 +50,8 @@ new class extends Component {
 
         $this->showStory = true;
 
+        $this->conclusion = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', what conclusion can we draw from it?", 200);
+
         $this->lesson = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', what moral lesson can we derive from it?", 200);
 
         $this->generatedTitle = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory' suggest a title. Ensure it's within 5 to 10 words.", 70);
@@ -73,6 +76,7 @@ new class extends Component {
             'title' =>  $this->generatedTitle,
             'content' =>  $this->generatedStory,
             'moral_lesson' =>  $this->lesson,
+            'conclusion' =>  $this->conclusion,
         ]);
 
 
@@ -214,7 +218,22 @@ new class extends Component {
                 <div class="Bottom">
 
                     <h3 class="text-center text-2xl font-semibold">Verses</h3>
-                    <pre>{{ $verses }}</pre>
+                    @php
+$versesArray = json_decode($verses, true);
+if ($versesArray) {
+    foreach ($versesArray as $verse) {
+        echo "<p><strong>Verse:</strong> " . $verse['verse'] . "</p>";
+        echo "<p><strong>Content:</strong> " . $verse['content'] . "</p>";
+    }
+}
+@endphp
+                </div>
+
+                <div class="Bottom">
+                    <h3 class="text-center text-2xl font-semibold">Conclusion</h3>
+                    <p>
+                        {{ $conclusion }}
+                    </p>
                 </div>
             </div>
         @endif
