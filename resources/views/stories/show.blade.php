@@ -48,7 +48,7 @@
 
                     <div class="mt-4">
                         <a href="{{ route('stories.index') }}">
-                            <button class="btn btn-outline btn-secondary h-10 rounded-0  ring-1 ring-offset-1 ring-inset ring-blue-500 normal-case">
+                            <button class="btn btn-outline btn-sm btn-secondary h-10 rounded-0  ring-1 ring-offset-1 ring-inset ring-blue-500 normal-case">
                                 <i class="fa-regular fa-circle-left"></i> Back
                             </button>
                         </a>
