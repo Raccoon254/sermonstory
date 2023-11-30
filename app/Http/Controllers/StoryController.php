@@ -26,7 +26,8 @@ class StoryController extends Controller
 
     public function home(): View
     {
-        $stories = Story::take(3)->get();
+        //Get random 3 stories
+        $stories = Story::inRandomOrder()->limit(3)->get();
         return view('welcome', compact('stories'));
     }
 
