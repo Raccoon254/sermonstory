@@ -111,7 +111,7 @@ button:focus:not(:focus-visible) {
 /* scrollbars */
 ::-webkit-scrollbar {
     width: 0.8rem;
-    height: 0.5rem;
+    height: 0.4rem;
 }
 
 ::-webkit-scrollbar-track {
