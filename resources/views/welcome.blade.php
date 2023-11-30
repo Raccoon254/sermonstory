@@ -38,7 +38,7 @@
             <div class="bg-white p-6 rounded shadow hover:shadow-lg">
                 <h3 class="text-xl font-semibold mb-3">{{ $story->title }}</h3>
                 <p>{{ Str::limit($story->content, 100) }}...</p>
-                <a href="{{ route('stories.show', $story) }}" class="text-indigo-600 mt-2 inline-block">Read More</a>
+                <a href="{{ route('register') }}" class="text-indigo-600 mt-2 inline-block">Read More</a>
             </div>
         @endforeach
     </div>
