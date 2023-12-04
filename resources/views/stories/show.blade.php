@@ -9,7 +9,7 @@
             <!-- Use a semi-transparent overlay to make the text more readable -->
             <div class="absolute inset-0 bg-gray-50 rounded opacity-40"></div>
 
-            <div class="relative z-10 max-w-2xl p-6 backdrop-blur-sm bg-base-100 bg-opacity-10 rounded shadow-sm">
+            <div class="relative z-10 max-w-2xl p-4 backdrop-blur-sm bg-base-100 bg-opacity-10 rounded shadow-sm">
                 <h1 class="text-3xl font-semibold mb-4">{{ $story->title }}</h1>
                 <p class="mb-4">{{ $story->content }}</p>
 
@@ -37,24 +37,36 @@
                     </div>
                 @endif
 
-                <div class="flex justify-between items-center">
-                    @if($story->categoryTags->count())
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            @foreach($story->categoryTags as $tag)
-                                <span class="tag bg-gray-200 p-1 rounded">{{ $tag->name }}</span>
-                            @endforeach
-                        </div>
-                    @endif
+                <div class="flex text-xs gap-1 justify-start items-center">
 
                     <div class="mt-4">
                         <a href="{{ route('stories.index') }}">
-                            <button class="btn btn-outline btn-sm btn-secondary h-10 rounded-0  ring-1 ring-offset-1 ring-inset ring-blue-500 normal-case">
+                            <button class="btn btn-outline btn-sm h-10 rounded-0  ring-1 ring-offset-1 ring-inset ring-blue-500 normal-case">
                                 <i class="fa-regular fa-circle-left"></i> Back
                             </button>
                         </a>
                     </div>
 
                 </div>
+<!--Related Stories-->
+@php
+    $relatedStories = $story->relatedStories();
+@endphp
+
+@if($relatedStories->count())
+    <div class="mt-32">
+        <h2 class="text-xl font-semibold mb-2">Related Stories:</h2>
+        <div class="grid grid-cols-1 gap-4">
+            @foreach($relatedStories as $relatedStory)
+                <div class="p-4 border-b-2 border-gray-300">
+                    <h3 class="text-lg font-semibold mb-2">{{ $relatedStory->title }}</h3>
+                    <p>{{ Str::limit($relatedStory->content, 100) }}</p>
+                    <a href="{{ route('stories.show', $relatedStory) }}" class="text-blue-500 mt-2 inline-block">Read More</a>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endif
             </div>
         </div>
 

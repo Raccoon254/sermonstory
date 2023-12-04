@@ -29,4 +29,20 @@ class Story extends Model
         return $this->belongsToMany(CategoryTag::class);
     }
 
+    public function relatedStories()
+{
+    // Get the IDs of the categories of the current story
+    $categoryIds = $this->categoryTags->pluck('id');
+
+    // Get all stories that belong to these categories
+    return Story::whereHas('categoryTags', function ($query) use ($categoryIds) {
+        $query->whereIn('id', $categoryIds);
+    })
+    // Exclude the current story
+    ->where('id', '!=', $this->id)
+    // Limit to 4 stories
+    ->take(4)
+    ->get();
+}
+
 }
