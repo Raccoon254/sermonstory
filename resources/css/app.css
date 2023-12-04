@@ -208,3 +208,39 @@ a:hover {
 .btn{
     text-decoration: none !important;
 }
+
+.category-buttons-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.category-buttons {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.arrow.left {
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.arrow.right {
+    right: 0;
+    transform: translateY(-50%);
+}

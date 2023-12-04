@@ -6,7 +6,9 @@ use App\Models\CategoryTag;
 
 state(['categories' => CategoryTag::all()]);
 state(['search' => '', 'stories' => Story::all()]);
-state(['selectedCategory' => '']);
+state(['selectedCategories' => []]);
+state(['filteredStories' => []]);
+state(['selectedCategoriesString' => 'All Stories']);
 
 $updateSearch = function ($search) {
     $this->search = $search;
@@ -17,11 +19,55 @@ $performSearch = function () {
     $this->stories = Story::where('content', 'LIKE', '%' . $this->search . '%')->get();
 };
 
-$filterByCategory = function ($categoryId) {
-    $this->selectedCategory = CategoryTag::find($categoryId);
-    $this->stories = Story::whereHas('categoryTags', function ($query) use ($categoryId) {
-        $query->where('id', $categoryId);
-    })->get();
+$filterByCategory = function ($categoryIds) {
+    if (!is_array($categoryIds)) {
+        $categoryIds = explode(',', $categoryIds);
+    }
+
+    $this->selectedCategories = $categoryIds;
+
+    //if no categories are selected, show all stories
+    if (count($categoryIds) == 0) {
+        $this->stories = Story::all();
+        return;
+    }
+
+    //GET ALL STORIES WITH THE SELECTED CATEGORIES for each category
+    $this->stories = collect([]);
+    foreach ($categoryIds as $categoryId) {
+        $category = CategoryTag::find($categoryId);
+        //get the stories for this category
+        $stories = $category->stories;
+        //add the stories to the stories array
+        $this->stories = $this->stories->merge($stories);
+    }
+
+    //remove duplicates
+    $this->stories = $this->stories->unique('id');
+};
+
+$handleCheckboxClick = function ($categoryId, $isChecked) {
+    if ($isChecked) {
+        if (!in_array($categoryId, $this->selectedCategories)) {
+            $this->selectedCategories[] = $categoryId;
+        }
+    } else {
+        $index = array_search($categoryId, $this->selectedCategories);
+        if ($index !== false) {
+            unset($this->selectedCategories[$index]);
+        }
+    }
+    $this->filterByCategory($this->selectedCategories);
+    $this->updateSelectedCategoriesString();
+};
+
+$updateSelectedCategoriesString = function () {
+    $selectedCategoriesIds = $this->selectedCategories;
+    foreach ($selectedCategoriesIds as $index => $categoryId) {
+        $category = CategoryTag::find($categoryId);
+        $selectedCategoriesIds[$index] = $category->name;
+    }
+    $this->selectedCategoriesString = implode(', ', $selectedCategoriesIds);
 };
 
 $resetFilter = function () {
@@ -32,7 +78,7 @@ $resetFilter = function () {
 
 <div>
     <section>
-        <center class="text-[2rem] my-2 font-semibold">Explore {{$selectedCategory->name ?? ''}} Stories</center>
+        <center class="text-[2rem] my-2 font-semibold">Explore Stories</center>
         @if (count($stories))
             <section class="gap-3 flex md:px-20 sm:px-2 flex-col">
 
@@ -40,7 +86,7 @@ $resetFilter = function () {
                 <div class="flex justify-end w-full">
                     <div class="w-48 rounded-full relative">
                         <label class="relative">
-                            <input class="h-8 w-full rounded-full input-bordered" wire:keydown="updateSearch($event.target.value)" type="text" placeholder="Search for stories">
+                            <input class="h-8 w-full text-xs rounded-full input-bordered" wire:keydown="updateSearch($event.target.value)" type="text" placeholder="Search for stories" value="{{ $selectedCategoriesString }}" />
                             <span class="absolute top-[-5px] left-[15px] text-[7px] text-gray-300">Powered by Raccoon254</span>
                         </label>
                         <button wire:click="performSearch" class="h-6 w-8 flex items-center justify-center border-l border-gray-600 absolute top-[4px] right-1 text-[15px] hover:text-[20px] hover:text-warning">
@@ -48,16 +94,18 @@ $resetFilter = function () {
                         </button>
                     </div>
 </div>
-                    <div class="category-buttons flex py-1 overflow-auto">
-                            <button class="btn btn-primary ring-1 ring-secondary ring-offset-1 rounded m-1 btn-xs" wire:click="resetFilter">All Stories</button>
-                        @foreach ($categories as $category)
-                            <button class="btn ring-1 ring-gray-700 ring-offset-1 rounded m-1 btn-xs" wire:click="filterByCategory('{{ $category->id }}')" class="btn">
-                                {{ $category->name }}
-                            </button>
-                        @endforeach
-
-                    </div>
-
+<div class="category-buttons-container relative overflow-hidden">
+    <div class="arrow left hidden absolute top-0 bottom-0 flex items-center">&lt;</div>
+    <div class="category-buttons flex text-xs py-1 overflow-auto">
+        <button class="ring-1 h-8 ring-offset-1 rounded mx-2" wire:click="resetFilter">All Stories</button>
+        @foreach ($categories as $category)
+        <button class="{{ in_array($category->id, $selectedCategories) ? 'active' : '' }} flex items-center px-1 ring-1 h-8 ring-gray-400 mr-2 rounded" wire:click="handleCheckboxClick('{{ $category->id }}', {{ in_array($category->id, $selectedCategories) ? 'false' : 'true' }})">
+            {{ $category->name }}
+        </button>
+        @endforeach
+    </div>
+    <div class="arrow right hidden absolute top-0 bottom-0 right-0 flex items-center">&gt;</div>
+</div>
                 </div>
 
                 @foreach ($stories as $story)
@@ -112,4 +160,34 @@ $resetFilter = function () {
 
         </section>
     </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+    var container = document.querySelector('.category-buttons');
+    var leftArrow = container.querySelector('.arrow.left');
+    var rightArrow = container.querySelector('.arrow.right');
+
+    container.addEventListener('scroll', function () {
+        if (container.scrollLeft > 0) {
+            leftArrow.classList.remove('hidden');
+        } else {
+            leftArrow.classList.add('hidden');
+        }
+
+        if (container.scrollLeft < container.scrollWidth - container.clientWidth) {
+            rightArrow.classList.remove('hidden');
+        } else {
+            rightArrow.classList.add('hidden');
+        }
+    });
+
+    leftArrow.addEventListener('click', function () {
+        container.scrollLeft -= 100;
+    });
+
+    rightArrow.addEventListener('click', function () {
+        container.scrollLeft += 100;
+    });
+});
+    </script>
     </div>
