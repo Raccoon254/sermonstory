@@ -111,7 +111,7 @@ button:focus:not(:focus-visible) {
 /* scrollbars */
 ::-webkit-scrollbar {
     width: 0.8rem;
-    height: 0.4rem;
+    height: 0.8rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -119,7 +119,8 @@ button:focus:not(:focus-visible) {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(197, 21, 21, 0.2);
+    background: #01014d;
+    border-radius: 2px;
 }
 
 div>nav{
@@ -224,15 +225,24 @@ a:hover {
 
 .arrow {
     position: absolute;
-    top: 50%;
+    top: 35%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    justify-content: center;
     width: 30px;
     height: 30px;
     background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 100px;
     color: white;
     text-align: center;
     line-height: 30px;
     cursor: pointer;
     z-index: 1;
+}
+
+.arrow-r{
+    right: 0;
+
 }
 
 .arrow.left {

@@ -95,7 +95,9 @@ $resetFilter = function () {
                     </div>
 </div>
 <div class="category-buttons-container relative overflow-hidden">
-    <div class="arrow left hidden absolute top-0 bottom-0 flex items-center">&lt;</div>
+    <div class="arrow left hidden ring absolute top-0 bottom-0 flex items-center">
+        <i class="fa-solid arrow-l fa-chevron-left"></i>
+    </div>
     <div class="category-buttons flex text-xs py-1 overflow-auto">
         <button class="ring-1 h-8 ring-offset-1 rounded mx-2" wire:click="resetFilter">All Stories</button>
         @foreach ($categories as $category)
@@ -104,7 +106,9 @@ $resetFilter = function () {
         </button>
         @endforeach
     </div>
-    <div class="arrow right hidden absolute top-0 bottom-0 right-0 flex items-center">&gt;</div>
+    <div class="arrow right absolute ring top-0 bottom-0 right-0 flex items-center">
+        <i class="fa-solid arrow-r fa-chevron-right"></i>
+    </div>
 </div>
                 </div>
 
@@ -162,10 +166,10 @@ $resetFilter = function () {
     </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     var container = document.querySelector('.category-buttons');
-    var leftArrow = container.querySelector('.arrow.left');
-    var rightArrow = container.querySelector('.arrow.right');
+    var leftArrow = document.querySelector('.arrow.left');
+    var rightArrow = document.querySelector('.arrow.right');
 
     container.addEventListener('scroll', function () {
         if (container.scrollLeft > 0) {
