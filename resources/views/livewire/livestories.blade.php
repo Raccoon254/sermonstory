@@ -36,19 +36,21 @@ $resetFilter = function () {
             <section class="gap-3 flex md:px-20 sm:px-2 flex-col">
 
                 <div class="w-full my-2">
-                    <div class="w-full relative">
+                <div class="flex justify-end w-full">
+                    <div class="w-48 rounded-full relative">
                         <label class="relative">
-                            <input class="h-10 w-full input-bordered" wire:keydown="updateSearch($event.target.value)" type="text" placeholder="Search for stories">
+                            <input class="h-10 w-full rounded-full input-bordered" wire:keydown="updateSearch($event.target.value)" type="text" placeholder="Search for stories">
                             <span class="absolute top-[-10px] left-[15px] text-[8px] text-gray-300">Powered by Raccoon254</span>
                         </label>
                         <button wire:click="performSearch" class="h-8 w-8 flex items-center justify-center border-l border-gray-950 absolute top-[4px] right-1 text-[15px] hover:text-[20px] hover:text-warning">
                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/></svg>
                         </button>
                     </div>
+</div>
                     <div class="category-buttons flex py-1 overflow-auto">
-                            <button class="btn btn-primary ring-1 ring-secondary btn-outline ring-offset-1 rounded m-1 btn-xs" wire:click="resetFilter">All Stories</button>
+                            <button class="btn btn-primary ring-1 ring-secondary ring-offset-1 rounded m-1 btn-xs" wire:click="resetFilter">All Stories</button>
                         @foreach ($categories as $category)
-                            <button class="btn ring-1 btn-outline ring-offset-1 rounded m-1 btn-xs" wire:click="filterByCategory('{{ $category->id }}')" class="btn">
+                            <button class="btn ring-1 ring-gray-700 ring-offset-1 rounded m-1 btn-xs" wire:click="filterByCategory('{{ $category->id }}')" class="btn">
                                 {{ $category->name }}
                             </button>
                         @endforeach
@@ -98,6 +100,7 @@ $resetFilter = function () {
                         @php
                             $colors = ['red', 'blue', 'green', 'purple', 'pink', 'indigo', 'gray', 'yellow', 'orange', 'teal', 'cyan', 'fuchsia', 'lime', 'lightBlue', 'emerald', 'rose', 'violet', 'amber', 'sky', 'orange', 'indigo', 'pink', 'red', 'blue', 'green', 'purple', 'pink', 'indigo', 'gray', 'orange', 'teal', 'cyan', 'fuchsia', 'lime', 'lightBlue', 'emerald', 'rose', 'violet', 'amber', 'sky', 'orange', 'indigo', 'pink', 'red', 'blue', 'green', 'purple', 'pink', 'indigo', 'gray', 'yellow', 'orange', 'teal', 'cyan', 'fuchsia', 'lightBlue', 'emerald', 'rose', 'violet', 'amber', 'sky', 'orange', 'indigo', 'pink', 'red', 'blue', 'green', 'purple', 'pink', 'indigo', 'gray', 'yellow', 'orange', 'teal', 'cyan', 'fuchsia', 'lime', 'lightBlue', 'emerald', 'rose', 'violet', 'amber', 'sky', 'orange', 'indigo', 'pink'];
                         @endphp
+                        <!--
                         <section class="flex text-xs gap-4 mb-3">
                             <!--Verses-->
                             <div class="flex align-middle items-center flex-wrap gap-1 mb-2">
@@ -119,6 +122,7 @@ $resetFilter = function () {
                                 @endforeach
                             </div>
                         </section>
+            -->
 
                     </div>
                 @endforeach
