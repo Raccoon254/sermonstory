@@ -79,7 +79,7 @@ $resetFilter = function () {
 
 <div>
     <section>
-        <center class="text-[2rem] my-2 font-semibold">Explore Stories</center>
+        <center class="text-[2rem] my-2 font-semibold">All Stories</center>
         @if (count($stories))
             <section class="gap-3 flex md:px-20 sm:px-2 flex-col">
 
@@ -106,10 +106,11 @@ $resetFilter = function () {
                             <i class="fa-solid arrow-l fa-chevron-left"></i>
                         </div>
                         <div class="category-buttons pl-20 flex text-xs py-1 overflow-auto">
-                            <button class="absolute left-0 ring-1 h-8 btn btn-sm ring-offset-1 rounded mx-2" wire:click="performSearch">
+                            <button class="absolute left-0 ring-1 h-8 btn btn-sm ring-offset-1 rounded mx-2"
+                                    wire:click="performSearch">
                                 Apply
                             </button>
-                            @foreach ($categories as $category)
+                            @foreach ($categories->sortBy('name') as $category)
                                 <button
                                     class="{{ in_array($category->id, $selectedCategories) ? 'active' : '' }} flex items-center px-1 ring-1 h-8 ring-gray-400 mr-2 rounded"
                                     wire:click="handleCheckboxClick('{{ $category->id }}', {{ in_array($category->id, $selectedCategories) ? 'false' : 'true' }})">
@@ -149,7 +150,8 @@ $resetFilter = function () {
                                       method="POST" class="d-inline tooltip">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-circle btn-sm ring-1 ring-offset-1 ring-inset ring-orange-600">
+                                    <button type="submit"
+                                            class="btn btn-circle btn-sm ring-1 ring-offset-1 ring-inset ring-orange-600">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
