@@ -153,51 +153,15 @@ new class extends Component {
 
     <div class="p-2 sm:p-4 bg-gray-50 border-b border-gray-200">
         <h2 class="font-semibold text-center text-xl sm:text-2xl mb-4">Generate a Story</h2>
-
-        <!-- Display generated story -->
-
-        <!--if showStory is true, display the story-->
-
+        <!--If showStory is true, display an alert-->
         @if($showStory)
-            <div class="p-2 bg-gray-100 flex flex-col gap-3 rounded mt-4">
-                <div class="top mb-2">
-                    <h3 class="text-center text-2xl font-semibold">{{ $generatedTitle }}</h3>
-                    <p>
-                        {{ $generatedStory }}
-                    </p>
-                </div>
-                <div class="mid mb-2">
-                    <h3 class="text-center text-2xl font-semibold">Moral Lesson</h3>
-                    <p>
-                        {{ $lesson }}
-                    </p>
-                </div>
-
-                <div class="Bottom">
-
-                    <h3 class="text-center text-2xl font-semibold">Verses</h3>
-                    @php
-                        $versesArray = json_decode($verses, true);
-                        if ($versesArray) {
-                            foreach ($versesArray as $verse) {
-                                echo "<p><strong>Verse:</strong> " . $verse['verse'] . "</p>";
-                                echo "<p><strong>Content:</strong> " . $verse['content'] . "</p>";
-                            }
-                        }
-                    @endphp
-                </div>
-
-                <div class="Bottom">
-                    <h3 class="text-center text-2xl font-semibold">Conclusion</h3>
-                    <p>
-                        {{ $conclusion }}
-                    </p>
-                </div>
+            <div role="alert" class="alert rounded alert-success">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Story generated successfully!</span>
+                <a href="#story" class="text-blue-500 hover:underline">Scroll to the story</a>
             </div>
         @endif
-
-
-        <form wire:submit.prevent="generate">
+    <form wire:submit.prevent="generate">
             @csrf
 
             <!-- Title -->
@@ -239,6 +203,48 @@ new class extends Component {
 
             </x-secondary-button>
         </form>
+
+        <!-- Display generated story -->
+
+        <!--if showStory is true, display the story-->
+
+        @if($showStory)
+            <div id="story" class="p-2 bg-gray-100 flex flex-col gap-3 rounded mt-4">
+                <div class="top mb-2">
+                    <h3 class="text-center text-2xl font-semibold">{{ $generatedTitle }}</h3>
+                    <p>
+                        {{ $generatedStory }}
+                    </p>
+                </div>
+                <div class="mid mb-2">
+                    <h3 class="text-center text-2xl font-semibold">Moral Lesson</h3>
+                    <p>
+                        {{ $lesson }}
+                    </p>
+                </div>
+
+                <div class="Bottom">
+
+                    <h3 class="text-center text-2xl font-semibold">Scriptures</h3>
+                    @php
+                        $versesArray = json_decode($verses, true);
+                        if ($versesArray) {
+                            foreach ($versesArray as $verse) {
+                                echo "<p><strong>Verse:</strong> " . $verse['verse'] . "</p>";
+                                echo "<p><strong>Content:</strong> " . $verse['content'] . "</p>";
+                            }
+                        }
+                    @endphp
+                </div>
+
+                <div class="Bottom">
+                    <h3 class="text-center text-2xl font-semibold">Conclusion</h3>
+                    <p>
+                        {{ $conclusion }}
+                    </p>
+                </div>
+            </div>
+        @endif
 
     </div>
 
