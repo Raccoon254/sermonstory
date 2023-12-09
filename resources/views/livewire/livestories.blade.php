@@ -16,7 +16,9 @@ $updateSearch = function ($search) {
 };
 
 $performSearch = function () {
-    $this->stories = Story::where('content', 'LIKE', '%' . $this->search . '%')->get();
+    $this->stories = null;
+    $this->filteredStories = null;
+    $this->filterByCategory($this->selectedCategories);
 };
 
 $filterByCategory = function ($categoryIds) {
@@ -57,7 +59,6 @@ $handleCheckboxClick = function ($categoryId, $isChecked) {
             unset($this->selectedCategories[$index]);
         }
     }
-    $this->filterByCategory($this->selectedCategories);
     $this->updateSelectedCategoriesString();
 };
 
@@ -104,8 +105,9 @@ $resetFilter = function () {
                         <div class="arrow left hidden ring absolute top-0 bottom-0 flex items-center">
                             <i class="fa-solid arrow-l fa-chevron-left"></i>
                         </div>
-                        <div class="category-buttons flex text-xs py-1 overflow-auto">
-                            <button class="ring-1 h-8 ring-offset-1 rounded mx-2" wire:click="resetFilter">All Stories
+                        <div class="category-buttons pl-20 flex text-xs py-1 overflow-auto">
+                            <button class="absolute left-0 ring-1 h-8 btn btn-sm ring-offset-1 rounded mx-2" wire:click="performSearch">
+                                Apply
                             </button>
                             @foreach ($categories as $category)
                                 <button
@@ -136,9 +138,9 @@ $resetFilter = function () {
 
                             @if(auth()->user() && Gate::allows('manage'))
 
-                                <div data-tip="Edit Story" class="flex tooltip gap-3 mb-3">
+                                <div data-tip="Edit Story" class="flex tooltip gap-1 mb-3">
                                     <a href="{{ route('stories.edit', $story) }}"
-                                       class="btn ring-1 ring-offset-1 ring-inset">
+                                       class="btn ring-1 btn-circle btn-sm ring-offset-1 ring-inset">
                                         <i class="fa-solid fa-pen-nib"></i>
                                     </a>
                                 </div>
@@ -147,7 +149,7 @@ $resetFilter = function () {
                                       method="POST" class="d-inline tooltip">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn ring-1 ring-offset-1 ring-inset ring-orange-600">
+                                    <button type="submit" class="btn btn-circle btn-sm ring-1 ring-offset-1 ring-inset ring-orange-600">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
