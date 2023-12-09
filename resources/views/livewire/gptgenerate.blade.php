@@ -159,7 +159,7 @@ new class extends Component {
             <!-- Title -->
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-semibold mb-2" for="title">Enter a title</label>
-                <input type="text" wire:model="title" class="border border-gray-300 rounded px-2 py-1 w-full" placeholder="Title eg A story about Joe">
+                <input type="text" id="title" wire:model="title" class="border border-gray-300 rounded px-2 py-1 w-full" placeholder="Title eg A story about Joe">
                 @error('title')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                 @enderror
