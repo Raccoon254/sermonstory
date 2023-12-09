@@ -129,8 +129,9 @@ $resetFilter = function () {
                 @foreach ($stories as $story)
                     <div class="story-card border-b-2">
                         <h2 class="text-xl mb-3 font-semibold">{{ $story['title'] }}</h2>
-                        <p class="mb-3">{{ $story['content'] }}..
-                            <a href="{{ route('stories.show', $story) }}" class="text-blue-500">Read More</a>
+                        <!-- Only show the first 100 characters of the story -->
+                        <p>{{ Str::limit($story['content'], 300) }}
+                            <a href="{{ route('gptstories.show', $story) }}" class="text-blue-500">Read More</a>
                         </p>
 
                         <div class="flex justify-end gap-2 mb-3">
