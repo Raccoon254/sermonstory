@@ -40,23 +40,23 @@ new class extends Component {
 
         try {
 
-        // Convert selected category IDs to names
-        $categoryNames = CategoryTag::whereIn('id', $this->selectedCategories)
-            ->pluck('name')
-            ->toArray();
+            // Convert selected category IDs to names
+            $categoryNames = CategoryTag::whereIn('id', $this->selectedCategories)
+                ->pluck('name')
+                ->toArray();
 
-        // Generate the story and associated content
-        $this->generatedStory = $this->getOpenAIResponse("Craft a real-life story related to '" . implode(' and ', $categoryNames) . "'. Ensure the story is within 100 to 150 words.", 300);
+            // Generate the story and associated content
+            $this->generatedStory = $this->getOpenAIResponse("Craft a real-life story related to '" . implode(' and ', $categoryNames) . "'. Ensure the story is within 100 to 150 words.", 300);
 
-        $this->showStory = true;
+            $this->showStory = true;
 
-        $this->conclusion = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', what conclusion can we draw from it?", 200);
+            $this->conclusion = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', what conclusion can we draw from it?", 200);
 
-        $this->lesson = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', what moral lesson can we derive from it?", 200);
+            $this->lesson = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', what moral lesson can we derive from it?", 200);
 
-        $this->generatedTitle = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory' suggest a title. Ensure it's within 5 to 10 words.", 70);
+            $this->generatedTitle = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory' suggest a title. Ensure it's within 5 to 10 words.", 70);
 
-        $this->verses = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', suggest three Bible verses in JSON format.{
+            $this->verses = $this->getOpenAIResponse("Based on the story: ' $this->generatedStory', suggest three Bible verses in JSON format.{
             \"verse1\": {
                 \"verse\": \"Matthew 1:1\",
                 \"content\": \"Example content for verse 1\"
@@ -71,36 +71,36 @@ new class extends Component {
             }
         }", 500);
 
-        // Save the story and associated data to the database
-        $storyModel = GptStory::create([
-            'title' =>  $this->generatedTitle,
-            'content' =>  $this->generatedStory,
-            'moral_lesson' =>  $this->lesson,
-            'conclusion' =>  $this->conclusion,
-        ]);
+            // Save the story and associated data to the database
+            $storyModel = GptStory::create([
+                'title' =>  $this->generatedTitle,
+                'content' =>  $this->generatedStory,
+                'moral_lesson' =>  $this->lesson,
+                'conclusion' =>  $this->conclusion,
+            ]);
 
 
-        //if verses is null, set it to empty array
-        if($this->verses == null){
-            $this->verses = "[]";
-        }
-
-        $verseData = json_decode($this->verses, true);
-
-        if ($verseData == null) {
-            $verseData = [];
-        }else{
-            foreach ($verseData as $verseItem) {
-                GptScripture::create([
-                    'story_id' => $storyModel->id,
-                    'verse' => $verseItem['verse'],
-                    'content' => $verseItem['content'],
-                ]);
+            //if verses is null, set it to empty array
+            if($this->verses == null){
+                $this->verses = "[]";
             }
-        }
+
+            $verseData = json_decode($this->verses, true);
+
+            if ($verseData == null) {
+                $verseData = [];
+            }else{
+                foreach ($verseData as $verseItem) {
+                    GptScripture::create([
+                        'story_id' => $storyModel->id,
+                        'verse' => $verseItem['verse'],
+                        'content' => $verseItem['content'],
+                    ]);
+                }
+            }
 
 
-        $storyModel->categoryTags()->attach($this->selectedCategories);
+            $storyModel->categoryTags()->attach($this->selectedCategories);
             DB::commit();
 
             // UI update logic...
@@ -219,14 +219,14 @@ new class extends Component {
 
                     <h3 class="text-center text-2xl font-semibold">Verses</h3>
                     @php
-$versesArray = json_decode($verses, true);
-if ($versesArray) {
-    foreach ($versesArray as $verse) {
-        echo "<p><strong>Verse:</strong> " . $verse['verse'] . "</p>";
-        echo "<p><strong>Content:</strong> " . $verse['content'] . "</p>";
-    }
-}
-@endphp
+                        $versesArray = json_decode($verses, true);
+                        if ($versesArray) {
+                            foreach ($versesArray as $verse) {
+                                echo "<p><strong>Verse:</strong> " . $verse['verse'] . "</p>";
+                                echo "<p><strong>Content:</strong> " . $verse['content'] . "</p>";
+                            }
+                        }
+                    @endphp
                 </div>
 
                 <div class="Bottom">
